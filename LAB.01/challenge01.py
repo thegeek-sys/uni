@@ -1,3 +1,5 @@
+# Creating a file that counts from 0 to 20 using only combinations of four fours
+
 from math import *
 
 print(4+4-4-4) #0
