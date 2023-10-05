@@ -80,30 +80,33 @@ def check_grade(a, b, c):
 # data è valida o no. Si possono ignorare gli anni bisestili. Ad esempio,
 # ritorna `False` per `30/2/2017` e `True` per `1/1/1111`.
 def check_date(d, m, y):
-    if m==1 and (d > 0 and d <= 31):
-        return True
-    elif m==2 and (d > 0 and d <= 28):
-        return True
-    elif m==3 and (d > 0 and d <= 31):
-        return True
-    elif m==4 and (d > 0 and d <= 30):
-        return True
-    elif m==5 and (d > 0 and d <= 31):
-        return True
-    elif m==6 and (d > 0 and d <= 30):
-        return True
-    elif m==7 and (d > 0 and d <= 31):
-        return True
-    elif m==8 and (d > 0 and d <= 31):
-        return True
-    elif m==9 and (d > 0 and d <= 30):
-        return True
-    elif m==10 and (d > 0 and d <= 31):
-        return True
-    elif m==11 and (d > 0 and d <= 30):
-        return True
-    elif m==1 and (d > 0 and d <= 31):
-        return True
+    if y > 0:
+        if m==1 and (d > 0 and d <= 31):
+            return True
+        elif m==2 and (d > 0 and d <= 28):
+            return True
+        elif m==3 and (d > 0 and d <= 31):
+            return True
+        elif m==4 and (d > 0 and d <= 30):
+            return True
+        elif m==5 and (d > 0 and d <= 31):
+            return True
+        elif m==6 and (d > 0 and d <= 30):
+            return True
+        elif m==7 and (d > 0 and d <= 31):
+            return True
+        elif m==8 and (d > 0 and d <= 31):
+            return True
+        elif m==9 and (d > 0 and d <= 30):
+            return True
+        elif m==10 and (d > 0 and d <= 31):
+            return True
+        elif m==11 and (d > 0 and d <= 30):
+            return True
+        elif m==1 and (d > 0 and d <= 31):
+            return True
+        else:
+            return False
     else:
         return False
     
