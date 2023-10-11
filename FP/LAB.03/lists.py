@@ -17,9 +17,8 @@ def max_element(elements: List[int]) -> int:
         for x in elements:
             if 'comp' not in locals() or x > comp:
                 comp = x
-    else:
-        return None
-    return comp
+        return comp
+    return None
 
 
 # Scrivere una funzione che rimuove i duplicati da una lista.
