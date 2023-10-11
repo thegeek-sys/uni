@@ -15,7 +15,19 @@ def make_hello(name: str) -> str:
 # che rimuove spazi all'inizio e alla fine della stringa.
 # Usare solo costrutti del linguaggio e non librerie.
 def strip_whitespace(string: str) -> str:
-    return string.replace(' ', '')
+    srt = 0
+    end = len(string)
+    for x in string:
+        if x == ' ':
+            srt += 1
+        else:
+            break
+    for x in string[::-1]:
+        if x == ' ':
+            end -= 1
+        else:
+            break
+    return string[srt:end]
 
 
 # Scrivere una funzione che implenta la stessa funzionalità di `str.split()`,

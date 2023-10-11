@@ -13,7 +13,13 @@ def sum_squares(elements: List[int]) -> int:
 
 # Scrivere una funzione che ritorna il valore massimo degli elementi di una lista.
 def max_element(elements: List[int]) -> int:
-    pass
+    if elements:
+        for x in elements:
+            if 'comp' not in locals() or x > comp:
+                comp = x
+    else:
+        return None
+    return comp
 
 
 # Scrivere una funzione che rimuove i duplicati da una lista.
