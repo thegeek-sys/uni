@@ -46,6 +46,7 @@ def flatten_list(elements: list) -> list:
     result = []
     for x in elements:
         if isinstance(x, list):
+            x = flatten_list(x)
             for y in x:
                 result.append(y)
         else:

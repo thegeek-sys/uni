@@ -34,7 +34,16 @@ def strip_whitespace(string: str) -> str:
 # rimuovendo uno dei caratteri presi in input. Non ritornare stringhe vuote.
 # Usare solo costrutti del linguaggio e non librerie.
 def split_string(string: str, characters: str = '') -> List[str]:
-    pass
+    res = []
+    word = ''
+    for i in range(len(string)):
+        if string[i] not in characters:
+            word += string[i]
+        else:
+            res.append(word)
+            word = ''
+    print(res)
+
 
 
 
