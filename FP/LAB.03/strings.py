@@ -71,30 +71,16 @@ def replace_substring(string: str, find: str, replace: str) -> str:
 # fatto delle sole lettere dell'alfabeto inglese e spazi che non sono crittati.
 # Suggerimento: Sono utili le funzioni `ord()` e `chr()`.
 def caesar_cypher(string: str, offset: int, decrypt: bool = False) -> str:
-    beth = list("abcdefghijklmnopqrstuvwxyz")
-    cryt = []
-    for i in range(len(beth)):
-        if chr(ord(beth[i])+offset) not in beth:
-            cryt.append(chr(ord(beth[i])+offset-26))
-        else:
-            cryt.append(chr(ord(beth[i])+offset))
-
-    cryt_decryt = ''
-    if not decrypt:
-        for i in range(len(string)):
-            if string[i] == ' ':
-                cryt_decryt += ' '
-            else:
-                cryt_decryt += cryt[beth.index(string[i])]
-    else:
-        for i in range(len(string)):
-            if string[i] == ' ':
-                cryt_decryt += ' '
-            else:
-                cryt_decryt += beth[cryt.index(string[i])]
-    return cryt_decryt
-
-
+    beth, string = -26, list(string)
+    if decrypt:
+        offset = -offset
+        beth = -beth
+    for index, elem in enumerate(string):
+        if 97 <= ord(elem)+offset <= 122 and elem != ' ':
+            string[index] = chr(ord(elem)+offset)
+        elif elem != ' ':
+            string[index] = chr(ord(elem)+offset+beth)
+    return "".join(string)
 
 # Test funzioni
 testing.print_test(make_hello, 'Pippo')
