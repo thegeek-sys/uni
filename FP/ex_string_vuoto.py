@@ -40,19 +40,15 @@ Per creare la stringa usare le seguenti regole:
 
 
 def leetv(line):
-   out, i, line = '', 0, line.lower()
-   diz = [('a','4'),('i','1'),('e','3'),('o','0'),('z','7'),('s','5'),('g','9'),(' ', '_'),('f', 'F'),('n', 'N'),('r', 'R'),('w', 'W'),('l', 'L'),('y', 'Y'),('x', 'X')]
-   for elem in line:
-      replaced = False
-      for y in diz:
-         if elem == y[0]:
-            i += 1
-            out += y[1]
-            replaced = True
-      if not replaced:
-         out += elem
-   print(out)
-   return out,i
+   out, i = '', 0
+   orig = ('aieozsgfnrwlyx ', '4130759FNRWLYX_')
+   for x in line.lower():
+      if x in orig[0]:
+         out += orig[1][orig[0].index(x)]
+         i += 1
+      else:
+         out += x
+   return out, i
                
          
            
