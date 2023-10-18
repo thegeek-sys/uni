@@ -41,9 +41,9 @@ Per creare la stringa usare le seguenti regole:
 
 def leetv(line):
    out, i = '', 0
-   orig = ('aieozsgfnrwlyx ', '4130759FNRWLYX_')
-   for x in line.lower():
-      if x in orig[0]:
+   orig = ('aieozsgfnrwlyx BCDHJKMPQTUV', '4130759FNRWLYX_bcdhjkmpqtuv')
+   for x in line:
+      if x.lower() in orig[0] or x.upper() in orig[0]:
          out += orig[1][orig[0].index(x)]
          i += 1
       else:
@@ -56,7 +56,7 @@ def leetv(line):
 if __name__ == '__main__':
     # Valutazione
     tests = [('My name is Neo', ('mY_N4m3_15_N30', 12),),
-             ('Follow the White Rabbit!', ('F0LL0W_th3_Wh1t3_R4bb1t!', 16)),
+             ('Follow the White Rabbit!', ('F0LL0W_th3_Wh1t3_R4bb1t!', 13)),
              ('What is the Matrix?', ('Wh4t_15_th3_m4tR1X?', 12))]
 
     # se assert vi da errore controllate il vostro output rispetto a
