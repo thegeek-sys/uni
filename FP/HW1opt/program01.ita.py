@@ -33,20 +33,7 @@ ATTENZIONE: quando caricate il file assicuratevi che sia nella codifica UTF8
 def ex1(int_seq, subtotal):
     i = 0
     int_seq_list = int_seq.split(',')
-    '''
-    for start in range(len(int_seq_list)):
-        for end in range(len(int_seq_list)):
-            for x in int_seq_list[start:end]:
-                somma += int(x)
-            if somma == subtotal:
-                i += 1
-            elif somma > subtotal:
-                somma = 0
-                break
-            somma = 0
-    '''
 
-    
     for start in range(len(int_seq_list)):
         end = 0
         somma = 0
@@ -57,7 +44,6 @@ def ex1(int_seq, subtotal):
             if somma == subtotal:
                 i += 1
             end += 1
-    
     return i
 
 
