@@ -1,152 +1,145 @@
+# -*- coding: utf-8 -*-
 
+''' 
+Abbiamo una stringa int_seq contenente una sequenza di interi non-negativi
+    separati da virgole ed un intero positivo subtotal.
 
+Progettare una funzione ex1(int_seq, subtotal) che
+    riceve come argomenti la stringa int_seq e l'intero subtotal e
+    restituisce il numero di sottostringhe di int_seq
+    la somma dei cui valori è subtotal.
 
+Ad esempio, per int_seq='3,0,4,0,3,1,0,1,0,1,0,0,5,0,4,2' e subtotal=9,
+    la funzione deve restituire 7.
 
+Infatti:
+'3,0,4,0,3,1,0,1,0,1,0,0,5,0,4,2'
+ _'0,4,0,3,1,0,1,0'_____________
+ _'0,4,0,3,1,0,1'_______________
+ ___'4,0,3,1,0,1,0'_____________
+____'4,0,3,1,0,1'_______________
+____________________'0,0,5,0,4'_
+______________________'0,5,0,4'_
+ _______________________'5,0,4'_
 
-'''
-    Homework 1 - opzionale
+NOTA: è VIETATO usare/importare ogni altra libreria a parte quelle già presenti
 
-    Abbiamo una stringa S contenente una sequenza di interi non-negativi separati da virgole 
-    ed un intero positivo m.  
+NOTA: il timeout previsto per questo esercizio è di 1 secondo per ciascun test (sulla VM)
 
-    Progettare una funzione es1(S,m) che prende in input  la stringa S e l'intero m e 
-    restituisce il numero di sottostringhe di S la somma dei cui valori e' m.
-    
-    Ad esempio, per S='3,0,4,0,3,1,0,1,0,1,0,0,5,0,4,2' e m=9 la funzione deve restituire 7.
-    
-    Infatti:
-    '3,0,4,0,3,1,0,1,0,1,0,0,5,0,4,2'
-     _'0,4,0,3,1,0,1,0'_____________
-     _'0,4,0,3,1,0,1'_______________
-     ___'4,0,3,1,0,1,0'_____________
-    ____'4,0,3,1,0,1'_______________
-    ____________________'0,0,5,0,4'_
-    ______________________'0,5,0,4'_
-     _______________________'5,0,4'_
-    
-    NOTA: il timeout previsto per questo esercizio è di 8 secondi per ciascun test
-
-    ATTENZIONE: quando caricate il file assicuratevi che sia nella codifica UTF8 
+ATTENZIONE: quando caricate il file assicuratevi che sia nella codifica UTF8
     (ad esempio editatelo dentro Spyder)
 '''
 
-def ex1(S,m):
-    "se un valore supera m posso spezzare la ricerca in due parti e buttare quel valore"
-    numeri = list(map(int, S.split(",")))
-    last   = 0
-    somma  = 0
-    N      = len(numeri)
-    for i in range(N):
-        if numeri[i] > m:
-            somma += sottosoluzione(numeri[last:i], m, last)
-            last = i+1
-    if last < N:
-        somma += sottosoluzione(numeri[last:], m, last)
-    return somma
+'''
+def ex1(int_seq, subtotal):
+    i, int_seq_list = 0, int_seq.split(',')
+    int_seq_list = [int(elem) for elem in int_seq_list]
 
-def sottosoluzione(numeri, m, offset):
-    #print(f"sottosoluzione {offset} {offset+len(numeri)}")
-    def minore():
-        nonlocal i,j,compattati, somma, quante
-        #print(f"i={i+offset} j={j+offset} somma={somma}<{m} quante={quante}")
-        # aggiungo un valore positivo a destra
-        j += 1
-        if j<N:
-            x = compattati[j]
-            if x < 0:
-                j += 1
-                if j<N:
-                    x = compattati[j]
-                    somma += x
-            else:
+    for start in range(len(int_seq_list)):
+        somma = 0
+        for end in range(len(int_seq_list)):
+            for x in int_seq_list[start:end]:
                 somma += x
-    def maggiore():
-        nonlocal i,j,compattati, somma, quante
-        #print(f"i={i+offset} j={j+offset} somma={somma}>{m} quante={quante}")
-        # sottraggo il valore a sinistra e mi sposto al prox positivo
-        x = compattati[i]
-        somma -= x
-        i += 1
-        if i<N and compattati[i]<0:
-            i += 1
-    def uguale():
-        nonlocal i,j,compattati, somma, quante
-        #print(f"i={i+offset} j={j+offset} somma={somma}=={m} quante={quante}")
-        # la somma vale 1
-        addendo = 1
-        # ma se seguita/preceduta da un valore negativo 
-        if j < N - 1 and compattati[j + 1] < 0:
-            addendo *= 1 - compattati[j+1]
-        if i > 0 and compattati[i - 1] < 0:
-            addendo *= 1 - compattati[i-1]
-        quante += addendo
-        # tolgo solo l'elemento a sinistra
-        somma -= compattati[i]
-        i += 1
-        if i<N and compattati[i]<0:
-            i += 1            
-        # aggiungo quello a destra
-        j += 1
-        if j<N:
-            x = compattati[j]
-            if x < 0:
-                j += 1
-                if j<N:
-                    x = compattati[j]
-                    #assert x>0, "non ci possono essere due negativi in sequenza"
-                    somma += x
-            else:
+            #somma = sum(int_seq_list[start:end])
+            if somma == subtotal:
+                i += 1
+            elif somma > subtotal:
+                break
+            somma = 0
+    
+
+
+    
+    for start in range(len(int_seq_list)):
+        end = 0
+        somma = 0
+        while end < len(int_seq_list) and somma <= subtotal:
+            somma = 0
+            for x in int_seq_list[start:end]:
                 somma += x
-    compattati = compatta(numeri, m)
-    #print(compattati)
-    N = len(compattati)
-    if N == 0:
-        return 0
-    if N == 1:
-        if compattati[0] == m:
-            return 1
-        else:
-            return 0
-    quante = 0
-    if compattati[0] < 0:
-        i = j = 1
-    else:
-        i = j = 0
-    somma = compattati[i]
-    while i < N and j < N:
-        # invarianti: i e j indicano valori positivi
-        #assert compattati[i]>0, f"valore negativo ({compattati[i]}) per i={i}" 
-        #assert compattati[j]>0, f"valore negativo ({compattati[j]}) per j={j}"
-        if somma < m:
-            minore()
-        elif somma > m:
-            maggiore()
-        else: # somma == m
-            uguale()
-    return quante
+            if somma == subtotal:
+                i += 1
+            end += 1
+    
+    return i
+'''
+
+def ex1(int_seq, subtotal):
+    int_seq_list = [int(elem) for elem in int_seq.split(',')]
+    n = len(int_seq_list)
+    prefix_sum = [0] * (n + 1)
+    count = 0
+
+    for i in range(n):
+        prefix_sum[i + 1] = prefix_sum[i] + int_seq_list[i]
+
+    for start in range(n):
+        for end in range(start + 1, n + 1):
+            current_sum = prefix_sum[end] - prefix_sum[start]
+            if current_sum == subtotal:
+                count += 1
+            elif current_sum > subtotal:
+                break
+
+    return count
 
 
-def compatta(numeri, m):
-    """compatto le sottosequenze di k zeri e le sostituisco con -k"""
-    compattati = []
-    zeri = 0
-    for x in numeri:
-        if x:
-            if zeri:
-                compattati.append(-zeri)
-                zeri = 0
-            compattati.append(x)
-        else:
-            zeri +=1
-    if zeri:
-        compattati.append(-zeri)
-    return compattati
+if __name__ == '__main__':
+    int_seq='3,0,4,0,3,1,0,1,0,1,0,0,5,0,4,2'
+    subtotal=9
+    #int_seq_list = [int(x) for x in int_seq_list]
+    #print(int_seq_list)
+    #for start in range(len(int_seq_list)):
+    '''
+        end = 0
+        somma = 0
+        while end < len(int_seq_list) and somma <= subtotal:
+            somma = 0
+            lista = int_seq_list[start:end]
+            for x in lista:
+                somma += int(x)
+            
+            if somma == subtotal:
+                i += 1
+                print(i,')',",".join(int_seq_list[start:end]))
+                print(somma)
+            end += 1
+            
+        #print('azzero la somma')
+        
+            #print(somma, int_seq_list[start:end])
+        '''
 
-def scompatta(compattati):
-    scompattati = []
-    for x in compattati:
-        if x<0:
-            scompattati.extend([0]*(-x))
-        else:
-            scompattati.append(x)
-    return scompattati
+    '''
+        for end in range(len(int_seq_list)):
+            for x in int_seq_list[start:end]:
+                somma += int(x)
+            #print(somma, int_seq_list[start:end])
+            if somma == subtotal:
+                i += 1
+                print(i,')',",".join(int_seq_list[start:end]))
+            elif somma > subtotal:
+                somma = 0
+                #print('azzero la somma')
+                break
+            somma = 0
+        
+    '''
+
+    int_seq_list = [int(elem) for elem in int_seq.split(',')]
+    n = len(int_seq_list)
+    prefix_sum = [0] * (n + 1)
+    count = 0
+
+    for i in range(n):
+        prefix_sum[i + 1] = prefix_sum[i] + int_seq_list[i]
+
+    for start in range(n):
+        for end in range(start + 1, n + 1):
+            current_sum = prefix_sum[end] - prefix_sum[start]
+            if current_sum == subtotal:
+                count += 1
+            elif current_sum > subtotal:
+                break
+
+    print(count)
