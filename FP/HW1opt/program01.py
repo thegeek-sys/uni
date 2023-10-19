@@ -47,14 +47,20 @@ def ex1(int_seq, subtotal):
 
 
 if __name__ == '__main__':
-    int_seq='3,0,4,0,3,1,0,1,0,1,0,0,5,0,4,2'
-    subtotal=9
-    somma = 0
-    count = 0
-    int_seq_list = [int(elem) for elem in int_seq.split(',')]
+    #import time
 
-    i = 0
+    #int_seq='3,0,4,0,3,1,0,1,0,1,0,0,5,0,4,2'
+    #subtotal=9
+    test_seq_len  = 20000
+    int_seq  = ",".join(['1'] * test_seq_len)
+    subtotal = 1000
+    expected = test_seq_len - subtotal + 1
+
+    int_seq_list = int_seq.split(',')
+    count = 0
+
     '''
+    i = 0
     while i < len(int_seq_list):
         j=i
         somma = 0
@@ -65,13 +71,17 @@ if __name__ == '__main__':
             j += 1
         i+=1
     '''
+    #start_time = time.time()
+
     for start in range(len(int_seq_list)):
-        for end in range(len(int_seq_list)-start):
-            somma += int_seq_list[end+start]
-            if somma == subtotal:
-                count += 1
-            elif somma > subtotal:
-                somma = 0
+        somma = 0
+        for end in range(start, len(int_seq_list)):
+            somma += int(int_seq_list[end])
+            if somma > subtotal:
                 break
-        
+            elif somma == subtotal:
+                count += 1
+    
+    #print("--- %s seconds ---" % (time.time() - start_time))
     print(count)
+    print(expected)
