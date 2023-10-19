@@ -47,7 +47,7 @@ def ex1(int_seq, subtotal):
 
 
 if __name__ == '__main__':
-    #import time
+    #from time import process_time
 
     #int_seq='3,0,4,0,3,1,0,1,0,1,0,0,5,0,4,2'
     #subtotal=9
@@ -71,7 +71,7 @@ if __name__ == '__main__':
             j += 1
         i+=1
     '''
-    #start_time = time.time()
+    #st = process_time()
 
     for start in range(len(int_seq_list)):
         somma = 0
@@ -82,6 +82,6 @@ if __name__ == '__main__':
             elif somma == subtotal:
                 count += 1
     
-    #print("--- %s seconds ---" % (time.time() - start_time))
+    #print("--- %s seconds ---" % (process_time() - st))
     print(count)
     print(expected)
