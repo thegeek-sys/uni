@@ -71,11 +71,11 @@ def ex1(int_seq, subtotal):
     count = 0
 
     for i in range(n):
-        prefix_sum[i + 1] = prefix_sum[i] + int_seq_list[i]
+        prefix_sum[i + 1] = prefix_sum[i] + int_seq_list[i] # somma cumulativa
 
     for start in range(n):
         for end in range(start + 1, n + 1):
-            current_sum = prefix_sum[end] - prefix_sum[start]
+            current_sum = prefix_sum[end] - prefix_sum[start] # differenza della somma cumulativa tra end e start
             if current_sum == subtotal:
                 count += 1
             elif current_sum > subtotal:
