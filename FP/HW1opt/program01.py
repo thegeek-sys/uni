@@ -87,59 +87,18 @@ def ex1(int_seq, subtotal):
 if __name__ == '__main__':
     int_seq='3,0,4,0,3,1,0,1,0,1,0,0,5,0,4,2'
     subtotal=9
-    #int_seq_list = [int(x) for x in int_seq_list]
-    #print(int_seq_list)
-    #for start in range(len(int_seq_list)):
-    '''
-        end = 0
-        somma = 0
-        while end < len(int_seq_list) and somma <= subtotal:
-            somma = 0
-            lista = int_seq_list[start:end]
-            for x in lista:
-                somma += int(x)
-            
-            if somma == subtotal:
-                i += 1
-                print(i,')',",".join(int_seq_list[start:end]))
-                print(somma)
-            end += 1
-            
-        #print('azzero la somma')
-        
-            #print(somma, int_seq_list[start:end])
-        '''
-
-    '''
-        for end in range(len(int_seq_list)):
-            for x in int_seq_list[start:end]:
-                somma += int(x)
-            #print(somma, int_seq_list[start:end])
-            if somma == subtotal:
-                i += 1
-                print(i,')',",".join(int_seq_list[start:end]))
-            elif somma > subtotal:
-                somma = 0
-                #print('azzero la somma')
-                break
-            somma = 0
-        
-    '''
-
-    int_seq_list = [int(elem) for elem in int_seq.split(',')]
-    n = len(int_seq_list)
-    prefix_sum = [0] * (n + 1)
+    #somma = 0
     count = 0
+    int_seq_list = [int(elem) for elem in int_seq.split(',')]
 
-    for i in range(n):
-        prefix_sum[i + 1] = prefix_sum[i] + int_seq_list[i]
-
-    for start in range(n):
-        for end in range(start + 1, n + 1):
-            current_sum = prefix_sum[end] - prefix_sum[start]
-            if current_sum == subtotal:
+    i = 0
+    while i < len(int_seq_list):
+        j=i
+        somma = 0
+        while somma <= subtotal and j<len(int_seq_list):
+            somma += int_seq_list[j]
+            if subtotal == somma:
                 count += 1
-            elif current_sum > subtotal:
-                break
-
+            j += 1
+        i+=1
     print(count)
