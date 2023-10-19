@@ -30,68 +30,31 @@ ATTENZIONE: quando caricate il file assicuratevi che sia nella codifica UTF8
     (ad esempio editatelo dentro Spyder)
 '''
 
-'''
 def ex1(int_seq, subtotal):
-    i, int_seq_list = 0, int_seq.split(',')
-    int_seq_list = [int(elem) for elem in int_seq_list]
-
-    for start in range(len(int_seq_list)):
-        somma = 0
-        for end in range(len(int_seq_list)):
-            for x in int_seq_list[start:end]:
-                somma += x
-            #somma = sum(int_seq_list[start:end])
-            if somma == subtotal:
-                i += 1
-            elif somma > subtotal:
-                break
-            somma = 0
-    
-
-
-    
-    for start in range(len(int_seq_list)):
-        end = 0
-        somma = 0
-        while end < len(int_seq_list) and somma <= subtotal:
-            somma = 0
-            for x in int_seq_list[start:end]:
-                somma += x
-            if somma == subtotal:
-                i += 1
-            end += 1
-    
-    return i
-'''
-
-def ex1(int_seq, subtotal):
-    int_seq_list = [int(elem) for elem in int_seq.split(',')]
-    n = len(int_seq_list)
-    prefix_sum = [0] * (n + 1)
+    int_seq_list = int_seq.split(',')
     count = 0
 
-    for i in range(n):
-        prefix_sum[i + 1] = prefix_sum[i] + int_seq_list[i] # somma cumulativa
-
-    for start in range(n):
-        for end in range(start + 1, n + 1):
-            current_sum = prefix_sum[end] - prefix_sum[start] # differenza della somma cumulativa tra end e start
-            if current_sum == subtotal:
-                count += 1
-            elif current_sum > subtotal:
+    for start in range(len(int_seq_list)):
+        somma = 0
+        for end in range(len(int_seq_list)-start):
+            somma += int(int_seq_list[start + end])
+            if somma > subtotal:
                 break
-
+            elif somma == subtotal:
+                count += 1
+                
     return count
 
 
 if __name__ == '__main__':
     int_seq='3,0,4,0,3,1,0,1,0,1,0,0,5,0,4,2'
     subtotal=9
-    #somma = 0
+    somma = 0
     count = 0
     int_seq_list = [int(elem) for elem in int_seq.split(',')]
 
     i = 0
+    '''
     while i < len(int_seq_list):
         j=i
         somma = 0
@@ -101,4 +64,14 @@ if __name__ == '__main__':
                 count += 1
             j += 1
         i+=1
+    '''
+    for start in range(len(int_seq_list)):
+        for end in range(len(int_seq_list)-start):
+            somma += int_seq_list[end+start]
+            if somma == subtotal:
+                count += 1
+            elif somma > subtotal:
+                somma = 0
+                break
+        
     print(count)
