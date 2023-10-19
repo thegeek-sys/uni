@@ -36,8 +36,8 @@ def ex1(int_seq, subtotal):
 
     for start in range(len(int_seq_list)):
         somma = 0
-        for end in range(len(int_seq_list)-start):
-            somma += int(int_seq_list[start + end])
+        for end in range(start, len(int_seq_list)):
+            somma += int(int_seq_list[end])
             if somma > subtotal:
                 break
             elif somma == subtotal:
