@@ -41,9 +41,9 @@ Per creare la stringa usare le seguenti regole:
 
 def leetv(line):
    out, i = '', 0
-   orig = ('aieozsgfnrwlyx ', '4130759FNRWLYX_')
-   for x in line.lower():
-      if x in orig[0]:
+   orig = ('aieozsgfnrwlyx BCDHJKMPQTUV', '4130759FNRWLYX_bcdhjkmpqtuv')
+   for x in line:
+      if x.lower() in orig[0] or x.upper() in orig[0]:
          out += orig[1][orig[0].index(x)]
          i += 1
       else:
