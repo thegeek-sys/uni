@@ -49,14 +49,14 @@ def leetv(line):
       else:
          out += x
    return out, i
-               
-         
-           
+
+
+
 
 if __name__ == '__main__':
     # Valutazione
     tests = [('My name is Neo', ('mY_N4m3_15_N30', 12),),
-             ('Follow the White Rabbit!', ('F0LL0W_th3_Wh1t3_R4bb1t!', 16)),
+             ('Follow the White Rabbit!', ('F0LL0W_th3_Wh1t3_R4bb1t!', 13)),
              ('What is the Matrix?', ('Wh4t_15_th3_m4tR1X?', 12))]
 
     # se assert vi da errore controllate il vostro output rispetto a
