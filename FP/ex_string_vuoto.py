@@ -49,9 +49,9 @@ def leetv(line):
       else:
          out += x
    return out, i
-               
-         
-           
+
+
+
 
 if __name__ == '__main__':
     # Valutazione
