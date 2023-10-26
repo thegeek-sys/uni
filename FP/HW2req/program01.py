@@ -100,36 +100,34 @@ def generate_digits(bases : List[int] ) -> List[List[int]]:
     [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4]]
     è una soluzione valida.
     '''
-    '''a = []
-    y = 0
-    p=0
-    while p < len(bases):
-        a.append(None)
-        p+=1
-    check = []
-    i = 1
-    while i < len(bases):
-    #for i in range(len(bases)):
-        for x in range(bases[i]):
-            for j in range(x):
-                y+=1
-                check.append(a)
-        i+=1
 
-    print(y)
-    print(check)
-    print(a)'''
-    o = []
+    '''o = []
     check = []
     nums = []
     for i in range(len(bases)):
         y = []
-        for j in range(bases[i]):
+        for j in range(bases[i]+1):
             y.append(j)
         nums.append(y)
     
     print(check)
-    print(nums)
+    print(nums)'''
+    
+
+    check = []
+    out = []
+    #bases = [x-1 for x in bases]
+    end = [0]*len(bases)
+    while end != bases:
+        
+        for i in range(len(end)):
+            for x in range(bases[i]):
+                end[i] = x
+                print(end, end[i])
+        
+
+    return out
+
 
 
 def find_doubles(bases : List[int]) -> Set[int]:
@@ -158,4 +156,4 @@ if __name__ == '__main__':
     # se vuoi provare il tuo codice su piccoli dati
     # nota per eseguire questo main devi usare program.py
     # come cliente e non come modulo ossia con python program.py
-    generate_digits([2, 5,3])
+    print(generate_digits([2, 5]))
