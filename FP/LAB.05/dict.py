@@ -102,11 +102,11 @@ def merge_dict(dictionaries: List[dict]) -> dict:
 def intersect_dict(dictionaries: List[dict]) -> dict:
     out = {}
     for i in range(len(dictionaries)):
-        dict = set(dictionaries[i]) & set(dictionaries[len(dictionaries)-i-1])
+        dictionary = set(dictionaries[i]) & set(dictionaries[len(dictionaries)-i-1])
         for key, val in dictionaries[i].items():
-            if key in dict and key not in out:
+            if key in dictionary and key not in out:
                 out[key] = [val]
-            elif key in dict:
+            elif key in dictionary:
                 out[key].extend([val])
     return(out)
 
