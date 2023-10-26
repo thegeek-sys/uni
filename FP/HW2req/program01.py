@@ -119,22 +119,17 @@ def generate_digits(bases : List[int] ) -> List[List[int]]:
     print(y)
     print(check)
     print(a)'''
-    y = 1
     o = []
     check = []
-    for x in bases:
-        for j in range(x):
-            for i in range(j):
-                
-                o.append(i)
-                #if len(o) == len(bases):
-                #    check.append(o)
-                #    o = []
-            #for p in range(j):
-            #    o.append(j)
-            check.append(o)
-
+    nums = []
+    for i in range(len(bases)):
+        y = []
+        for j in range(bases[i]):
+            y.append(j)
+        nums.append(y)
+    
     print(check)
+    print(nums)
 
 
 def find_doubles(bases : List[int]) -> Set[int]:
