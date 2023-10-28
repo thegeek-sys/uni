@@ -100,33 +100,24 @@ def generate_digits(bases : List[int] ) -> List[List[int]]:
     [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4]]
     è una soluzione valida.
     '''
-
-    '''o = []
-    check = []
-    nums = []
-    for i in range(len(bases)):
-        y = []
-        for j in range(bases[i]+1):
-            y.append(j)
-        nums.append(y)
     
-    print(check)
-    print(nums)'''
-    
+    if not bases:
+        return []
 
-    check = []
-    out = []
-    #bases = [x-1 for x in bases]
-    end = [0]*len(bases)
-    while end != bases:
-        
-        for i in range(len(end)):
-            for x in range(bases[i]):
-                end[i] = x
-                print(end, end[i])
-        
+    combinations = [[]]
 
-    return out
+    for base in bases:
+        new_combinations = []
+        for combination in combinations:
+            for digit in range(base):
+                #print(combination,digit)
+                new_combinations.append(combination + [digit])
+                #print(new_combinations)
+        combinations = new_combinations
+        print(new_combinations)
+
+    return combinations
+
 
 
 
@@ -146,7 +137,15 @@ def find_doubles(bases : List[int]) -> Set[int]:
     [0, 2, 1] -> 0*4^0 + 2*3^1 + 1*2^2 = 10
     '''
     # SCRIVI QUI IL TUO CODICE
-    pass
+    digits = generate_digits(bases)
+    full_res = []
+    doubles = set()
+    for digit in digits:
+        full_res.append(decode_digits(digit, bases))
+    for x in full_res:
+        if full_res.count(x) > 1:
+            doubles.add(x)
+    return doubles
 
 
 ###################################################################################
@@ -156,4 +155,5 @@ if __name__ == '__main__':
     # se vuoi provare il tuo codice su piccoli dati
     # nota per eseguire questo main devi usare program.py
     # come cliente e non come modulo ossia con python program.py
-    print(generate_digits([2, 5]))
+    out = generate_digits([4,3,2])
+    print(out)
