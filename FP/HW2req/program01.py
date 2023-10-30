@@ -101,7 +101,7 @@ def generate_digits(bases : List[int] ) -> List[List[int]]:
     è una soluzione valida.
     '''
     
-    if not bases:
+    '''if not bases:
         return []
 
     combinations = [[]]
@@ -116,7 +116,22 @@ def generate_digits(bases : List[int] ) -> List[List[int]]:
         combinations = new_combinations
         print(new_combinations)
 
-    return combinations
+    return combinations'''
+
+    check = []
+    out = []
+    #bases = [x-1 for x in bases]
+    end = [0]*len(bases)
+    print(end)
+    for i in range(len(end)-1,-1,-1):
+        while end[i]<bases[i]:
+            out.append(end[:])
+            end[i] += 1
+        end[i]-=1
+
+        
+
+    return out
 
 
 
