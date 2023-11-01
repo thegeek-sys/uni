@@ -101,37 +101,19 @@ def generate_digits(bases : List[int] ) -> List[List[int]]:
     è una soluzione valida.
     '''
     
-    '''if not bases:
-        return []
-
-    combinations = [[]]
-
-    for base in bases:
-        new_combinations = []
-        for combination in combinations:
-            for digit in range(base):
-                #print(combination,digit)
-                new_combinations.append(combination + [digit])
-                #print(new_combinations)
-        combinations = new_combinations
-        print(new_combinations)
-
-    return combinations'''
-
-    check = []
     out = []
-    #bases = [x-1 for x in bases]
-    end = [0]*len(bases)
-    print(end)
-    for i in range(len(end)-1,-1,-1):
-        while end[i]<bases[i]:
-            out.append(end[:])
-            end[i] += 1
-        end[i]-=1
-
-        
-
+    end = [0] * len(bases)
+    
+    while end[0] < bases[0]:
+        out.append(end[:])
+        end[-1] += 1
+        for i in range(len(end) - 1, 0, -1):
+            if end[i] == bases[i]:
+                end[i] = 0
+                end[i - 1] += 1
+    
     return out
+
 
 
 
@@ -170,5 +152,5 @@ if __name__ == '__main__':
     # se vuoi provare il tuo codice su piccoli dati
     # nota per eseguire questo main devi usare program.py
     # come cliente e non come modulo ossia con python program.py
-    out = generate_digits([4,3,2])
+    out = generate_digits([2,5])
     print(out)
