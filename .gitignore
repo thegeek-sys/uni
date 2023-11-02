@@ -1,4 +1,3 @@
 .pytest_cache
 .vscode
 **/__pycache__/
-/FP/HW/HW3opt/test_random.json
