@@ -118,6 +118,7 @@ def generate_digits(bases : List[int] ) -> List[List[int]]:
 
 
 
+
 def find_doubles(bases : List[int]) -> Set[int]:
     '''
     Data una lista di basi, genera la lista di tutte le possibili
@@ -133,15 +134,12 @@ def find_doubles(bases : List[int]) -> Set[int]:
     [3, 1, 1] -> 3*4^0 + 1*3^1 + 1*2^2 = 10
     [0, 2, 1] -> 0*4^0 + 2*3^1 + 1*2^2 = 10
     '''
-    # SCRIVI QUI IL TUO CODICE
     digits = generate_digits(bases)
-    full_res = []
-    doubles = set()
-    for digit in digits:
-        full_res.append(decode_digits(digit, bases))
+    buff = dict()
+    full_res = [decode_digits(digit, bases) for digit in digits]
     for x in full_res:
-        if full_res.count(x) > 1:
-            doubles.add(x)
+        buff[x] = buff.get(x,0) + 1
+    doubles = set(k for k, v in buff.items() if v > 1)
     return doubles
 
 
@@ -152,5 +150,5 @@ if __name__ == '__main__':
     # se vuoi provare il tuo codice su piccoli dati
     # nota per eseguire questo main devi usare program.py
     # come cliente e non come modulo ossia con python program.py
-    out = generate_digits([2,5])
+    out = find_doubles([4, 3, 2])
     print(out)
