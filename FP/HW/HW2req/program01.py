@@ -107,15 +107,15 @@ def generate_digits(bases : List[int] ) -> List[List[int]]:
     while end[0] < bases[0]:
         out.append(end[:])
         end[-1] += 1
-        for i in range(len(end) - 1, 0, -1):
+        i=len(end)-1
+        while i > 0:
             if end[i] == bases[i]:
                 end[i] = 0
                 end[i - 1] += 1
-    
+                i -= 1
+            else:
+                break
     return out
-
-
-
 
 
 
@@ -134,12 +134,12 @@ def find_doubles(bases : List[int]) -> Set[int]:
     [3, 1, 1] -> 3*4^0 + 1*3^1 + 1*2^2 = 10
     [0, 2, 1] -> 0*4^0 + 2*3^1 + 1*2^2 = 10
     '''
-    digits = generate_digits(bases)
-    buff = dict()
+    digits, buff = generate_digits(bases), dict()
     full_res = [decode_digits(digit, bases) for digit in digits]
     for x in full_res:
         buff[x] = buff.get(x,0) + 1
     doubles = set(k for k, v in buff.items() if v > 1)
+
     return doubles
 
 
