@@ -110,19 +110,24 @@ def translate_files(pretty_files: list):
 
 def sanitize_txt(titles: dict) -> list:
     pretty_files = []
-    for title, path in titles.items():
+    for title, path_rel in titles.items():
         sanitized = []
         print('\n\n\n\n\n')
-        with open(path, mode='rt') as song:
-            print(path)
+        with open(path_rel, mode='rt') as song:
+            print(path_rel)
             song=song.readlines()
             for i in range(len(song)):
                 sanitized.append(song[i][::-1])
             #sanitized.append(reversed(song.readlines()[::-1]))
             sanitized = ''.join([x.replace('\n','') for x in sanitized])
-        with open(f'{os.path.dirname(path)}/{title}.txt', mode='wt') as song:
+        parent = f'translated/{os.path.dirname(path_rel)}'
+        print(parent, os.path.exists(parent))
+        #if not os.path.exists(parent):
+        #    print('making direeeeeeeeeeeeeeeeeeeeeee')
+        os.makedirs(parent, exist_ok=True)
+        with open(f'{parent}/{title}.txt', mode='wt') as song:
             song.write(sanitized)
-        pretty_files.append(f'{os.path.dirname(path)}/{title}.txt')
+        pretty_files.append(f'{os.path.dirname(path_rel)}/{title}.txt')
     return pretty_files
         
         
