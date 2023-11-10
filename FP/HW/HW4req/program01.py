@@ -151,4 +151,24 @@ def Umkansanize(source_root:str, target_root:str) -> dict[str,int]:
 
 if __name__ == "__main__":
     #Umkansanize("Tarahumara", "Umkansanian")
-    print(sanitize_txt(get_titles_files()))
+    #print(sanitize_txt(get_titles_files()))
+    with open('FP\\HW\\HW4req\\translated\\test01\\The absorbing garbage earns retina..txt', mode='rt') as fr:
+        fr = fr.read()
+        notes = {'0': 'A', '1': 'B', '2': 'C', '3': 'D', '4': 'E', '5': 'F', '6': 'G', '-': 'b', '+': '#', ' ': 'P'}
+        i = 0
+        out = ''
+        to_replace = []
+        while i < len(fr)-1:
+            print(fr[i])
+            to_replace.append(fr[i])
+            print(to_replace)
+            if (fr[i] != fr[i+1]) and (fr[i+1] not in to_replace) and (fr[i+1] != '-') and (fr[i+1] != '+'):
+                #print(fr[i] != fr[i+1], fr[i+1] not in to_replace, fr[i+1] != '-', fr[i+1] != '+')
+                counter = sum(c.isdigit() or c.isspace() for c in to_replace)
+                to_translate = set(c for c in to_replace)
+                x = [notes[c] for c in to_translate]
+                x = sorted(x, key=lambda elem:(not elem.isupper(), elem.isalpha(), elem))
+                out += (''.join(x))+str(counter)
+                to_replace.clear()
+            i += 1
+        print(out)
