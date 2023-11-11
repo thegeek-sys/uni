@@ -162,13 +162,35 @@ if __name__ == "__main__":
             print(fr[i])
             to_replace.append(fr[i])
             print(to_replace)
-            if (fr[i] != fr[i+1]) and (fr[i+1] not in to_replace) and (fr[i+1] != '-') and (fr[i+1] != '+'):
+            if (fr[i] != fr[i+1]) and (fr[i+1] not in to_replace) and ((fr[i+1] != '-') or ('+' in to_replace)) and ((fr[i+1] != '+') or ('-' in to_replace)):
+                if ((fr[i+1] == '-') and ('+' in to_replace)) or ((fr[i+1] == '+') and ('-' in to_replace)):
+                    to_replace.pop()
+                    i-=1
                 #print(fr[i] != fr[i+1], fr[i+1] not in to_replace, fr[i+1] != '-', fr[i+1] != '+')
                 counter = sum(c.isdigit() or c.isspace() for c in to_replace)
                 to_translate = set(c for c in to_replace)
                 x = [notes[c] for c in to_translate]
-                x = sorted(x, key=lambda elem:(not elem.isupper(), elem.isalpha(), elem))
+                x = sorted(x, key=lambda elem:(not elem.isupper(), elem.islower(), elem))
                 out += (''.join(x))+str(counter)
                 to_replace.clear()
             i += 1
+        print(i,len(fr)-1)
         print(out)
+        '''res = ''
+        for i in range(len(fr)-1):
+            print((fr[i] == fr[i+1]), ((fr[i+1] == '-') and ('+' not in res)), ((fr[i+1] == '+') and ('-' not in res)), (fr[i+1] in res))
+            print(fr[i], fr[i+1])
+            if (fr[i] == fr[i+1]) or ((fr[i+1] == '-') and ('+' not in res)) or ((fr[i+1] == '+') and ('-' not in res)) or (fr[i+1] in res):
+                res+=fr[i]
+                #print(res)
+            else:
+                counter = sum(c.isdigit() or c.isspace() for c in to_replace)
+                to_replace = set(x for x in res)
+                #print(to_replace)
+                to_replace = [notes[c] for c in to_replace]
+                to_replace = sorted(to_replace, key=lambda elem:(not elem.isupper(), elem.islower(), elem))
+                #print(to_replace)
+                out += ''.join(to_replace)+str(counter)
+                res = ''
+        print(out)'''
+
