@@ -176,21 +176,32 @@ if __name__ == "__main__":
             i += 1
         print(i,len(fr)-1)
         print(out)
-        '''res = ''
+
+        '''fr = fr.read()
+        notes = {'0': 'A', '1': 'B', '2': 'C', '3': 'D', '4': 'E', '5': 'F', '6': 'G', '-': 'b', '+': '#', ' ': 'P'}
+        counter = 1
+        #l = list(fr)
+        out = ''
+        start = 0
         for i in range(len(fr)-1):
-            print((fr[i] == fr[i+1]), ((fr[i+1] == '-') and ('+' not in res)), ((fr[i+1] == '+') and ('-' not in res)), (fr[i+1] in res))
-            print(fr[i], fr[i+1])
-            if (fr[i] == fr[i+1]) or ((fr[i+1] == '-') and ('+' not in res)) or ((fr[i+1] == '+') and ('-' not in res)) or (fr[i+1] in res):
-                res+=fr[i]
-                #print(res)
+            if fr[i] == fr[i+1] or (fr[i].isdigit() and fr[i+1] == '-') or (fr[i].isdigit() and fr[i+1] == '+') and len(fr)-1 != i:
+                counter += 1
+            elif (fr[i] == '-' or fr[i] == '+') and fr[i+1] == fr[i-1] and len(fr)-1 != i:
+                pass
             else:
-                counter = sum(c.isdigit() or c.isspace() for c in to_replace)
-                to_replace = set(x for x in res)
-                #print(to_replace)
-                to_replace = [notes[c] for c in to_replace]
-                to_replace = sorted(to_replace, key=lambda elem:(not elem.isupper(), elem.islower(), elem))
-                #print(to_replace)
-                out += ''.join(to_replace)+str(counter)
-                res = ''
+                counte = sum(x.isdigit() or x.isspace() for x in fr[start:i+1])
+                p = ''
+                for char in fr[start:i+1]:
+                    if char not in p:
+                        p = p+char
+
+                x = [notes[c] for c in p]
+                print(fr[start:i+1], counte, x)
+                print()
+                out += ''.join(x)+str(counte)
+                start = i+1
         print(out)'''
+                
+                
+
 
