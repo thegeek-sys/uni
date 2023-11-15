@@ -99,18 +99,11 @@ Nota 5: potete usare le funzioni della libreria 'os' per creare le directory nec
 
 import os
 
-def translate_files(pretty_files: list):
-#def translate_files(path: str):
-    '''notes = {'0': 'A', '1': 'B', '2': 'C', '3': 'D', '4': 'E', '5': 'F', '6': 'G', '-': 'b', '+': '#', ' ': 'P'}
-    for file in pretty_files:
-        with open(file, mode='rt') as file:
-            pass
-
-        with open(file, mode='wt') as file:
-            pass'''
+def translate_files(pretty_files: list, target_root: str) -> dict[str:str]:
     notes = {'0': 'A', '1': 'B', '2': 'C', '3': 'D', '4': 'E', '5': 'F', '6': 'G', '-': 'b', '+': '#', ' ': 'P'}
-    out = ''
+    duration = {}
     for pretty_file in pretty_files:
+        out = ''
         with open(pretty_file, mode='rt') as fr:
             fr = fr.read()
             no_duration = [notes[x] for x in fr if x in notes]
@@ -118,123 +111,81 @@ def translate_files(pretty_files: list):
             srt = 0
             test = no_duration[0:2]
             i = 1
-            while i < len(no_duration)-1:
-                a,b = no_duration[srt:i],no_duration[srt:i+1]
-                if no_duration[srt:i] != no_duration[srt:i+1] and (('#' not in test) and ('b' not in test)):
-                    #dur = sum(c.isupper() for c in no_duration[srt:i])
+            while i <= len(no_duration)-1:
+                a = no_duration[srt:i]
+                if a != no_duration[srt:i+1] and (('#' not in test) and ('b' not in test)):
                     dur=0
-                    base = ''.join(no_duration[srt:i])
+                    base = ''.join(a)
                     pattern = base
-                    #print(pattern)
-                    #print(no_duration[srt:i+dur*len(no_duration[srt:i])+1])
-                    while pattern in ''.join(no_duration[srt:i+dur*len(no_duration[srt:i])+1]):
-                        #print(no_duration[srt:i+dur*len(no_duration[srt:i])])
+                    while pattern in ''.join(no_duration[srt:i+dur*len(a)+1]):
                         dur += 1
-                        #print(pattern, ''.join(no_duration[srt:i+dur*len(no_duration[srt:i])+1]))
                         pattern += base
-                        #print(dur*len(no_duration[srt:i]), pattern)
-                    '''if dur > 1 and len(base) == 2 and no_duration[srt:i+dur*len(no_duration[srt:i])][-1] == base[0] and no_duration[srt:i+dur*len(no_duration[srt:i])][-2] == base[0]:
-                        print('base == 2')
-                        print(''.join(no_duration[srt:i+dur*len(no_duration[srt:i])]))
-                        #del no_duration[i:i+len(pattern)-3]
-                        del no_duration[i:i+dur*len(no_duration[srt:i])-2]
-                    elif dur > 1 and len(base) == 1 and no_duration[srt:i+dur*len(no_duration[srt:i])][-1] == ('#' or 'b'):
-                        print('base == 1')
-                        print(''.join(no_duration[srt:i+dur*len(no_duration[srt:i])]))
-                        del no_duration[i:i+len(pattern)-3]'''
-                    l = no_duration[0:i+dur*len(no_duration[srt:i])-int(2 if len(base) == 2 else 1)]
-                    #if dur > 1 and no_duration[i+dur*len(no_duration[srt:i])-int(2 if len(base) == 2 else 1)+1] == ('#' or 'b'):
-                    #    dur = l.count(str(l[0]))-1
-                    #    del no_duration[:i+dur*len(no_duration[srt:i])-int(2 if len(base) == 2 else 1)]
+                    indices = [i for i in range(srt,i+dur*len(a)-int(2 if len(base) == 2 else 1))]
+                    if (no_duration[indices[-1]+1] == '#' and '#' not in base) or (no_duration[indices[-1]+1] == 'b' and 'b' not in base):
+                        dur -= 1
+                        indices.pop()
                     if dur > 1:
-                        #l = no_duration[:i+dur*len(no_duration[srt:i])-int(2 if len(base) == 2 else 1)]
-                        #print(base, no_duration[srt:i+dur*len(no_duration[srt:i])][-1], no_duration[srt:i+dur*len(no_duration[srt:i])][-2])
-                        
-                        #del no_duration[i:i+len(pattern)-int(2 if len(base)==1 else 4)]
-                        del no_duration[0:i+dur*len(no_duration[srt:i])-int(2 if len(base) == 2 else 1)]
-                        dur = l.count(str(l[0]))
-                        print(dur)
-                        print(''.join(l))
-                        
-                        
-                        
-                    #print(no_duration)
-                    out += base
-                    out += str(dur)
+                        rem = []
+                        for x in sorted(indices, reverse=True):
+                            rem.append(no_duration.pop(x))
+                        dur = rem.count(str(rem[-1]))
+                        i-=int(2 if len(base)==2 else 1)
+
+                    out += base+' '+str(dur)+' '
                     srt = i
                     test = no_duration[srt:i+2]
                 else:
-                    test = no_duration[srt:i-1]
+                    test.clear()
                 i+=1
-    #print(''.join(no_duration))
-    print()
-    print(out)
-    
+        with open(pretty_file, mode='wt') as fw:
+            fw.write(out.replace(' ',''))
 
+        duration[os.path.splitext(os.path.basename(pretty_file))[0]] = sum([int(s) for s in out.split() if s.isdigit()])
 
+    return duration
 
 
 def sanitize_txt(titles: dict, dest: str) -> list:
     pretty_files = []
     for title, path_rel in titles.items():
-        #a = path_rel.index('/')
         path = dest + '/' + os.path.dirname(path_rel[path_rel.index('/')+1:])
         sanitized = []
-        print('\n\n\n\n\n')
         with open(path_rel, mode='rt') as song:
-            print(path_rel)
             song=song.readlines()
             for i in range(len(song)):
                 sanitized.append(song[i][::-1])
             sanitized = ''.join([x.replace('\n','') for x in sanitized])
         
-        #parent = f'{dest}/{path}'
-        print(path, os.path.exists(path))
         os.makedirs(path, exist_ok=True)
+        
         with open(f'{path}/{title}.txt', mode='wt') as song:
+        #with open(os.path.join(path, title+'.txt'), mode='wt') as song:
             song.write(sanitized)
         pretty_files.append(f'{path}/{title}.txt')
     return pretty_files
         
-        
-
-def get_titles_files(dir) -> dict[str,str]:
+def get_titles_files(directory: str) -> dict:
     titles = {}
-    rel_path = f'{dir}/index.txt'
-    with open(rel_path, mode='rt') as file_titles:
-        file_titles = file_titles.read().split('\n')
-        for tit_file in file_titles[:-1]:
-            single = tit_file.split('" "')
-            single[0], single[1] = single[0].replace('"', ''), single[1].replace('"', '')
-            titles[single[0]] = f'{dir}/{single[1]}'
+
+    with open(f'{directory}/index.txt', mode='rt') as file_titles:
+        for line in file_titles:
+            title, path_rel = map(lambda x: x.strip('"'), line.strip().split('" "'))
+            titles[title] = f'{directory}/{path_rel}'
+
     return titles
         
 
 def Umkansanize(source_root:str, target_root:str) -> dict[str,int]:
     titles = get_titles_files(source_root)
     pretty_files = sanitize_txt(titles, target_root)
-    #final = translate_files(pretty_files)
-    #print(final)
+    duration = translate_files(pretty_files, target_root)
+
+    with open(f'{target_root}/index.txt', 'wt') as index:
+        duration = dict(sorted(duration.items(), key=lambda item: (-item[1], item[0])))
+        for name, lenght in duration.items():
+            print(f'"{name}" {lenght}', file=index)
+    return duration
 
 if __name__ == "__main__":
-    #Umkansanize('test10', 'translated10')
-    print(translate_files(['translated10\\The friendly erection distributes programming..txt']))
-    '''
-    res = ''
-    for i in range(len(fr)-1):
-        print((fr[i] == fr[i+1]), ((fr[i+1] == '-') and ('+' not in res)), ((fr[i+1] == '+') and ('-' not in res)), (fr[i+1] in res))
-        print(fr[i], fr[i+1])
-        if (fr[i] == fr[i+1]) or ((fr[i+1] == '-') and ('+' not in res)) or ((fr[i+1] == '+') and ('-' not in res)) or (fr[i+1] in res):
-            res+=fr[i]
-            #print(res)
-        else:
-            counter = sum(c.isdigit() or c.isspace() for c in to_replace)
-            to_replace = set(x for x in res)
-            #print(to_replace)
-            to_replace = [notes[c] for c in to_replace]
-            to_replace = sorted(to_replace, key=lambda elem:(not elem.isupper(), elem.islower(), elem))
-            #print(to_replace)
-            out += ''.join(to_replace)+str(counter)
-            res = ''
-    print(out)'''
-
+    Umkansanize('test03', 'translated03')
+    ##print(translate_files(['translated10\\The friendly erection distributes programming..txt']))
