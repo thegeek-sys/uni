@@ -104,7 +104,7 @@ def translate_files(pretty_files: list, target_root: str) -> dict[str:str]:
     duration = {}
     for pretty_file in pretty_files:
         out = ''
-        with open(pretty_file, mode='rt') as fr:
+        with open(pretty_file, mode='rt', encoding='utf-8') as fr:
             fr = fr.read()
             no_duration = [notes[x] for x in fr if x in notes]
             no_duration.append('\n')
@@ -137,7 +137,7 @@ def translate_files(pretty_files: list, target_root: str) -> dict[str:str]:
                 else:
                     test.clear()
                 i+=1
-        with open(pretty_file, mode='wt') as fw:
+        with open(pretty_file, mode='wt', encoding='utf-8') as fw:
             fw.write(out.replace(' ',''))
 
         duration[os.path.splitext(os.path.basename(pretty_file))[0]] = sum([int(s) for s in out.split() if s.isdigit()])
@@ -150,7 +150,7 @@ def sanitize_txt(titles: dict, dest: str) -> list:
     for title, path_rel in titles.items():
         path = dest + '/' + os.path.dirname(path_rel[path_rel.index('/')+1:])
         sanitized = []
-        with open(path_rel, mode='rt') as song:
+        with open(path_rel, mode='rt', encoding='utf-8') as song:
             song=song.readlines()
             for i in range(len(song)):
                 sanitized.append(song[i][::-1])
@@ -158,8 +158,8 @@ def sanitize_txt(titles: dict, dest: str) -> list:
         
         os.makedirs(path, exist_ok=True)
         
-        with open(f'{path}/{title}.txt', mode='wt') as song:
-        #with open(os.path.join(path, title+'.txt'), mode='wt') as song:
+        with open(f'{path}/{title}.txt', mode='wt', encoding='utf-8') as song:
+        #with open(os.path.join(path, title+'.txt'), mode='wt', encoding='utf-8') as song:
             song.write(sanitized)
         pretty_files.append(f'{path}/{title}.txt')
     return pretty_files
@@ -167,7 +167,7 @@ def sanitize_txt(titles: dict, dest: str) -> list:
 def get_titles_files(directory: str) -> dict:
     titles = {}
 
-    with open(f'{directory}/index.txt', mode='rt') as file_titles:
+    with open(f'{directory}/index.txt', mode='rt', encoding='utf-8') as file_titles:
         for line in file_titles:
             title, path_rel = map(lambda x: x.strip('"'), line.strip().split('" "'))
             titles[title] = f'{directory}/{path_rel}'
@@ -180,7 +180,7 @@ def Umkansanize(source_root:str, target_root:str) -> dict[str,int]:
     pretty_files = sanitize_txt(titles, target_root)
     duration = translate_files(pretty_files, target_root)
 
-    with open(f'{target_root}/index.txt', 'wt') as index:
+    with open(f'{target_root}/index.txt', 'wt', encoding='utf-8') as index:
         duration = dict(sorted(duration.items(), key=lambda item: (-item[1], item[0])))
         for name, lenght in duration.items():
             print(f'"{name}" {lenght}', file=index)
