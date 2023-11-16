@@ -102,51 +102,52 @@ import os
 def translate_files(pretty_files: list, target_root: str) -> dict[str:str]:
     notes = {'0': 'A', '1': 'B', '2': 'C', '3': 'D', '4': 'E', '5': 'F', '6': 'G', '-': 'b', '+': '#', ' ': 'P'}
     duration = {}
-    for pretty_file in pretty_files:
+    for file, song in pretty_files.items():
         out = ''
-        with open(pretty_file, mode='rt', encoding='utf-8') as fr:
-            fr = fr.read()
-            no_duration = [notes[x] for x in fr if x in notes]
-            no_duration.append('\n')
-            srt = 0
-            test = no_duration[0:2]
-            i = 1
-            while i <= len(no_duration)-1:
-                a = no_duration[srt:i]
-                if a != no_duration[srt:i+1] and (('#' not in test) and ('b' not in test)):
-                    dur=0
-                    base = ''.join(a)
-                    pattern = base
-                    while pattern in ''.join(no_duration[srt:i+dur*len(a)+1]):
-                        dur += 1
-                        pattern += base
-                    indices = [i for i in range(srt,i+dur*len(a)-int(2 if len(base) == 2 else 1))]
-                    if (no_duration[indices[-1]+1] == '#' and '#' not in base) or (no_duration[indices[-1]+1] == 'b' and 'b' not in base):
-                        dur -= 1
-                        indices.pop()
-                    if dur > 1:
-                        rem = []
-                        for x in sorted(indices, reverse=True):
-                            rem.append(no_duration.pop(x))
-                        dur = rem.count(str(rem[-1]))
-                        i-=int(2 if len(base)==2 else 1)
+        #with open(song, mode='rt', encoding='utf-8') as fr:
+        #fr = fr.read()
+        no_duration = [notes[x] for x in song if x in notes]
+        no_duration.append('\n')
+        srt = 0
+        test = no_duration[0:2]
+        i = 1
+        while i <= len(no_duration)-1:
+            a = no_duration[srt:i]
+            if a != no_duration[srt:i+1] and (('#' not in test) and ('b' not in test)):
+                dur=0
+                base = ''.join(a)
+                pattern = base
+                while pattern in ''.join(no_duration[srt:i+dur*len(a)+1]):
+                    dur += 1
+                    pattern += base
+                indices = [i for i in range(srt,i+dur*len(a)-int(2 if len(base) == 2 else 1))]
+                if (no_duration[indices[-1]+1] == '#' and '#' not in base) or (no_duration[indices[-1]+1] == 'b' and 'b' not in base):
+                    dur -= 1
+                    indices.pop()
+                if dur > 1:
+                    rem = []
+                    for x in sorted(indices, reverse=True):
+                        rem.append(no_duration.pop(x))
+                    dur = rem.count(str(rem[-1]))
+                    i-=int(2 if len(base)==2 else 1)
 
-                    out += base+' '+str(dur)+' '
-                    srt = i
-                    test = no_duration[srt:i+2]
-                else:
-                    test.clear()
-                i+=1
-        with open(pretty_file, mode='wt', encoding='utf-8') as fw:
+                out += base+' '+str(dur)+' '
+                srt = i
+                test = no_duration[srt:i+2]
+            else:
+                test.clear()
+            i+=1
+        with open(file, mode='wt', encoding='utf-8') as fw:
             fw.write(out.replace(' ',''))
 
-        duration[os.path.splitext(os.path.basename(pretty_file))[0]] = sum([int(s) for s in out.split() if s.isdigit()])
+        duration[os.path.splitext(os.path.basename(file))[0]] = sum([int(s) for s in out.split() if s.isdigit()])
 
     return duration
 
 
 def sanitize_txt(titles: dict, dest: str) -> list:
-    pretty_files = []
+    #pretty_files = []
+    pretty_files = {}
     for title, path_rel in titles.items():
         path = dest + '/' + os.path.dirname(path_rel[path_rel.index('/')+1:])
         sanitized = []
@@ -161,7 +162,8 @@ def sanitize_txt(titles: dict, dest: str) -> list:
         with open(f'{path}/{title}.txt', mode='wt', encoding='utf-8') as song:
         #with open(os.path.join(path, title+'.txt'), mode='wt', encoding='utf-8') as song:
             song.write(sanitized)
-        pretty_files.append(f'{path}/{title}.txt')
+        #pretty_files.append(f'{path}/{title}.txt')
+        pretty_files[f'{path}/{title}.txt'] = sanitized
     return pretty_files
         
 def get_titles_files(directory: str) -> dict:
