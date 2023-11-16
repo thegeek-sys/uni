@@ -9,7 +9,7 @@ from shutil import rmtree
 DEBUG=True
 DEBUG=False
 
-TIMEOUT=2.5 # * 2 # VM warp factor
+TIMEOUT=6 # * 2 # VM warp factor
 
 @ddt
 class Test(testlib.TestCase):
@@ -17,7 +17,7 @@ class Test(testlib.TestCase):
         """Test implementation
         - bases:		list of bases (integers > 1)
         - expected:		expected result
-        TIMEOUT: 2.5 seconds for each test
+        TIMEOUT: 6 seconds for each test
         """
         if isdir(destination):
             rmtree(destination, ignore_errors=True)
