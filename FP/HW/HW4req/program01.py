@@ -106,10 +106,11 @@ def translate_files(pretty_files: dict) -> dict[str:str]:
     duration = {}
     for file, song in pretty_files.items():
         out = ''
-        no_duration = list(song.translate(translation_table))
-        no_duration.append('\n')
+        no_duration = str(song.translate(translation_table))
+        #no_duration.append('\n')
+        no_duration += '\n'
         srt = 0
-        test = no_duration[0:2]
+        test = list(no_duration[0:2])
         i = 1
         total = []
         while i <= len(no_duration)-1:
@@ -118,27 +119,39 @@ def translate_files(pretty_files: dict) -> dict[str:str]:
                 dur=0
                 base = ''.join(a)
                 pattern = base
-                while pattern in ''.join(no_duration[srt:i+dur*len(base)+1]):
-                    #srt = i+dur*len(base)
+                    
+                
+                #while pattern in ''.join(no_duration[srt:i+dur*len(base)+1]):
+                #    srt = i+dur*len(base)
+                #    dur += 1
+                #    pattern += base
+                start_index = 0
+                #srt_noduration = ''.join(no_duration)
+                while start_index < len(no_duration):
+                    #index = srt_noduration.find(base, start_index)
+                    index = no_duration.find(base, start_index)
+                    if index == -1 or index != start_index:
+                        break
                     dur += 1
-                    pattern += base
-                indices = list(range(srt, i+dur*len(a)-len(base)))
-                if no_duration[indices[-1]+1] in ('#', 'b') and no_duration[indices[-1]+1] not in base:
+                    start_index = index + len(base)
+                #indices = list(range(srt, i+dur*len(a)-len(base)))
+                if no_duration[start_index] in ('#', 'b') and no_duration[start_index] not in base:
                     dur -= 1
-                    indices.pop()
-                no_duration = no_duration[indices[-1]+1:]
+                    start_index -= 1
+                #    indices.pop()
+                no_duration = no_duration[start_index:]
                 i-=len(base)
 
                 out += base+str(dur)
                 total.append(dur)
                 srt = i
-                test = no_duration[srt:i+2]
+                test = list(no_duration[srt:i+2])
             else:
                 test.clear()
                 #srt = i
             i+=1
         with open(file, mode='wt', encoding='utf-8') as fw:
-            fw.write(out)
+            fw.write(out.rstrip())
 
         duration[os.path.splitext(os.path.basename(file))[0]] = sum(total)
 
