@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 '''
@@ -117,17 +119,21 @@ def translate_files(pretty_files: dict) -> dict[str:str]:
             if a != no_duration[srt:i+1] and all(x not in test for x in ['#','b']):
                 dur=0
                 base = ''.join(a)
-                pattern = base
-                while pattern in ''.join(no_duration[srt:i+dur*len(a)+1]):
+                #for i in range(len(no_duration[srt:])-1):
+                #    if no_duration[i] not in base:
+                #        fin = i
+                #dur = ''.join(no_duration[srt:fin]).count(base)
+
+                while base in ''.join(no_duration[srt+dur*len(a):i+dur*len(a)+1]):
                     dur += 1
-                    pattern += base
-                indices = list(range(srt, i+dur*len(a)-len(base)))
-                if no_duration[indices[-1]+1] in ('#', 'b') and no_duration[indices[-1]+1] not in base:
+                indices = list(range(i+dur*len(a)-len(base)-1, srt-1, -1))
+                if no_duration[indices[0]+1] in ('#', 'b') and no_duration[indices[-1]+1] not in base:
                     dur -= 1
-                    indices.pop()
-                #rem = []
-                rem = [no_duration.pop(x) for x in sorted(indices, reverse=True)]
-                dur = rem.count(str(rem[-1]))
+                    indices.pop(0)
+                #rem = [no_duration.pop(x) for x in indices]
+                no_duration = no_duration[indices[0]+1:]
+                #dur = rem.count(str(rem[-1]))
+                dur = len(indices)//len(base)
                 i-=len(base)
 
                 out += base+str(dur)
