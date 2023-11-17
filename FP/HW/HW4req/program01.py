@@ -118,16 +118,15 @@ def translate_files(pretty_files: dict) -> dict[str:str]:
                 dur=0
                 base = ''.join(a)
                 pattern = base
-                while pattern in ''.join(no_duration[srt:i+dur*len(a)+1]):
+                while pattern in ''.join(no_duration[srt:i+dur*len(base)+1]):
+                    #srt = i+dur*len(base)
                     dur += 1
                     pattern += base
                 indices = list(range(srt, i+dur*len(a)-len(base)))
                 if no_duration[indices[-1]+1] in ('#', 'b') and no_duration[indices[-1]+1] not in base:
                     dur -= 1
                     indices.pop()
-                #rem = []
-                rem = [no_duration.pop(x) for x in sorted(indices, reverse=True)]
-                dur = rem.count(str(rem[-1]))
+                no_duration = no_duration[indices[-1]+1:]
                 i-=len(base)
 
                 out += base+str(dur)
@@ -136,6 +135,7 @@ def translate_files(pretty_files: dict) -> dict[str:str]:
                 test = no_duration[srt:i+2]
             else:
                 test.clear()
+                #srt = i
             i+=1
         with open(file, mode='wt', encoding='utf-8') as fw:
             fw.write(out)
