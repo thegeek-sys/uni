@@ -13,7 +13,7 @@ prendendo in input il dizionario della funzione precedente eseguo un for con la 
     infine:
     a questo punto mi serve di formare la stringa di output e gestisto con due casi
         1° caso:
-        se nel loop precedente è stato eseguito uno dei due controlli sopra elencati in modo tale da inserire nella stringa la nota ripetuta seguita dalla sua durata
+        se nel loop precedente Ã¨ stato eseguito uno dei due controlli sopra elencati in modo tale da inserire nella stringa la nota ripetuta seguita dalla sua durata
         2° caso:
         quello in cui nel loop precedente non si è passato attraverso alcun controllo e dunque inserisce nell'output il carattere ora preso in considerazione seguito da un uno
 in tutto questo avevo creato un contatore per tenere conto della durata totale. scrivo infine tutti i file e restituisco il dizionario finale di output
