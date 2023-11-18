@@ -1,0 +1,21 @@
+1° funzione:
+estrae tutti i titoli dal file index con map e una lambda function e ritorna una dizionario composto da titolo e path associato
+
+2° funzione
+manipolando il dizionario creato dalla funzione precedente estrae e "sanifica" (mette su una riga e inverte) tutte le canzoni presenti nella cartella di origine, restituiendo anche qui un dizionario ma composto dal path di destinazione (quindi con il nome modificato) come key e la canzone messa su una riga come value
+
+3° funzione
+prendendo in input il dizionario della funzione precedente eseguo un for con la funzione .items() per estrarre path finale e "testo" della canzone. immediatamente traduco la canzone tramite un dizionario e la funzione .maketrans() per creare la lookup table e .translate() per tradurre. attraverso un while controllo carattere a carattere e in seguito un controllo attraverso if:
+    1° controllo:
+    verifico l'uguaglianza di due caratteri successivi e conta tutte le volte che questi si ripetono gestendo eventuali edge case
+    2° controllo:
+    verifico il caso di nota + "modificatore" (diesis o bemolle) e contro le sue occorrenze successive gestendo anche qui eventuali edgecase
+    infine:
+    a questo punto mi serve di formare la stringa di output e gestisto con due casi
+        1° caso:
+        se nel loop precedente è stato eseguito uno dei due controlli sopra elencati in modo tale da inserire nella stringa la nota ripetuta seguita dalla sua durata
+        2° caso:
+        quello in cui nel loop precedente non si è passato attraverso alcun controllo e dunque inserisce nell'output il carattere ora preso in considerazione seguito da un uno
+in tutto questo avevo creato un contatore per tenere conto della durata totale. scrivo infine tutti i file e restituisco il dizionario finale di output
+
+infine faccio il sorting del dizionario richiesto e lo scrivo dentro un nuovo file index nella cartella root di destinazione
