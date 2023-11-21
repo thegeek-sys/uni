@@ -9,7 +9,7 @@ from shutil import rmtree
 DEBUG=True
 DEBUG=False
 
-TIMEOUT=6 # * 2 # VM warp factor
+TIMEOUT=2.5 # * 2 # VM warp factor
 
 @ddt
 class Test(testlib.TestCase):
@@ -17,7 +17,7 @@ class Test(testlib.TestCase):
         """Test implementation
         - bases:		list of bases (integers > 1)
         - expected:		expected result
-        TIMEOUT: 6 seconds for each test
+        TIMEOUT: 2.5 seconds for each test
         """
         if isdir(destination):
             rmtree(destination, ignore_errors=True)
@@ -29,7 +29,7 @@ class Test(testlib.TestCase):
             with    self.ignored_function('pprint.pprint'), \
                     self.forbidden_function('builtins.input'), \
                     self.forbidden_function('builtins.eval'), \
-                    self.check_imports(allowed=['program01', '_io', 'typing', 'os', 'os.path', 'encodings.utf_8', 'builtins']), \
+                    self.check_imports(allowed=['program01', '_io', 'typing', 'os', 'os.path', 'encodings.utf_8']), \
                     self.timeout(TIMEOUT), \
                     self.timer(TIMEOUT):
                 import program01 as program

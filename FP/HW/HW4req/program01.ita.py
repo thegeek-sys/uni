@@ -97,106 +97,10 @@ Nota 5: potete usare le funzioni della libreria 'os' per creare le directory nec
 (ad esempio os.makedirs)
 '''
 
-
-import builtins
-if 'profile' not in dir(builtins):
-    def profile(X) : return X
-
 import os
 
-#@profile
-def count_segno(i, nota, no_duration, durata):
-    while no_duration[i:i+2] == nota:
-        durata += 1
-        i+=2
-    return durata, True, nota, i
-
-#@profile
-def count_same(i, no_duration, nota, l):
-    j = i
-    while i<l and no_duration[i+1] not in '#b' and no_duration[i] == nota:
-        i += 1
-    return i-j, True, i, nota
-    
-
-#@profile
-def translate_files(pretty_files: dict, translation_table: str) -> dict[str:str]:
-    duration = {}
-    for file, song in pretty_files.items():
-        out = ''
-        no_duration = str(song.translate(translation_table))+'\n\n'
-        i = durata = total = 0
-        segno = same = False
-        l = len(no_duration)-1
-        while i < l:
-            if no_duration[i] == no_duration[i+1] and segno==same==False:
-                durata, same, i, nota = count_same(i, no_duration, no_duration[i], l)                
-            elif no_duration[i+1] in '#b' and segno==same==False:
-                durata, segno, nota, i = count_segno(i, no_duration[i:i+2], no_duration, durata)
-            else:
-                if segno or same:
-                    out += nota+str(durata)
-                    total += durata
-                    durata = 0
-                    segno=same=False
-                else:
-                    out += no_duration[i]+'1'
-                    total += 1
-                    i+=1
-        with open(file, mode='wt', encoding='utf-8') as fw:
-            fw.write(out.rstrip())
-
-        duration[os.path.basename(file)[:-4]] = total
-    return duration
-
-
-#@profile
-def sanitize_txt(source: str, titles: dict, dest: str) -> list:
-    pretty_files = {}
-    for title, path_rel in titles.items():
-        dir_name = os.path.dirname(path_rel)
-        file_name = os.path.basename(path_rel)
-        path = f'{dest}/{dir_name}'
-        
-        os.makedirs(path, exist_ok=True)
-        
-        with open(f'{source}/{dir_name}/{file_name}', mode='rt', encoding='utf-8') as song:
-            sanitized = ''.join(line[::-1].strip('\n') for line in song)
-    
-        pretty_files[f'{path}/{title}.txt'] = sanitized
-
-    return pretty_files
-
-#@profile
-def get_titles_files(directory: str) -> dict:
-    titles = {}
-
-    with open(f'{directory}/index.txt', mode='rt', encoding='utf-8') as file_titles:
-        for line in file_titles:
-            title, path_rel = map(lambda x: x.strip('"'), line.strip().split('" "'))
-            titles[title] = path_rel
-
-    return titles
-
-#@profile    
 def Umkansanize(source_root:str, target_root:str) -> dict[str,int]:
-    notes = {'0': 'A', '1': 'B', '2': 'C', '3': 'D', '4': 'E', '5': 'F', '6': 'G', '-': 'b', '+': '#', ' ': 'P'}
-    translation_table = str.maketrans(notes)
-    
-    titles = get_titles_files(source_root)
-    pretty_files = sanitize_txt(source_root, titles, target_root)
-    duration = translate_files(pretty_files, translation_table)
-
-    with open(f'{target_root}/index.txt', 'wt', encoding='utf-8') as index:
-        duration = dict(sorted(duration.items(), key=lambda item: (-item[1], item[0])))
-        for name, lenght in duration.items():
-            print(f'"{name}" {lenght}', file=index)
-    return duration
+    pass
 
 if __name__ == "__main__":
-    #with open('test02/0.txt', mode='rt', encoding='utf-8') as song:
-    #    sanitized = ''.join(line[::-1].strip('\n') for line in song)
-    #print(sanitized)
-    Umkansanize('test10', 'translated10')
-    #print(translate_files({'':'1 4- 52-2 4+  111  5552-2-2-6 1-1-3-3-11   4-4-66   6+4-4-55500 6  2-1-1-1-6   333  333  4-4-4-2-   6+6+666 0+0+   555 2225- 3+3+6666'}))
-    #pass
+    Umkansanize("Tarahumara", "Umkansanian")
