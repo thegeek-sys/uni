@@ -126,6 +126,31 @@ def check_rotation(tile_or, tile_cryt):
         i += 1
     return decod[i]
         
+def decryt(encrypted_file, decode_pattern, key_len):
+    decode_raw = ''.join(decode_pattern)
+    beth = 'abcdefghijklmnopqrstwxyz'
+    
+    with open(encrypted_file, mode='rt', encoding='utf-8') as fr:
+        fr = list(fr.read())
+        
+        for i in range(len(fr)):
+            key = decode_raw[i%key_len]
+            if key == 'R':
+                fr[i] = chr(ord(fr[i])+1)
+            elif key == 'L':
+                fr[i] = chr(ord(fr[i])-1)
+            elif key == 'F' and i != len(fr)-1:
+                s = fr[i]
+                n = fr[i+1]
+                fr[i] = n
+                fr[i+1] = s
+            elif key == 'F' and i == len(fr)-1:
+                s = fr[i]
+                n = fr[0]
+                fr[i] = n
+                fr[0] = s
+    return ''.join(fr)
+                
     
 
 def jigsaw(puzzle_image: str, plain_image: str, tile_size:int, encrypted_file: str, plain_file: str) -> list[str]:
@@ -134,21 +159,32 @@ def jigsaw(puzzle_image: str, plain_image: str, tile_size:int, encrypted_file: s
     
     tiles_rows = len(im_or)//tile_size
     tiles_cols = len(im_or[0])//tile_size
+    key_len = tiles_rows*tiles_cols
+    #print(key_len)
+    
     #images.visd(im_or)
     #images.visd(im_cryt)
-    print(tiles_rows*tiles_cols)
-    decod_pattern = []
+    
+    decode_pattern = []
     for n_r in range(tiles_rows):
-        decod_rows = ''
+        decode_rows = ''
         for n_c in range(tiles_cols):
             tile_or, tile_cryt = get_tiles(im_or, im_cryt, n_r, n_c, tile_size)
             #images.visd(tile_or)
             #images.visd(tile_cryt)
-            decod_rows += check_rotation(tile_or, tile_cryt)
-        decod_pattern.append(decod_rows)
-    print(decod_pattern)
+            decode_rows += check_rotation(tile_or, tile_cryt)
+        decode_pattern.append(decode_rows)
+    #print(decode_pattern)
+    decrytted = decryt(encrypted_file, decode_pattern, key_len)
+    with open(plain_file, mode='wt', encoding='utf-8') as fw:
+        fw.write(decrytted)
+    
+    return decode_pattern
+    
+    
+    
             
 if __name__ == '__main__':
-    print(jigsaw('tests/test01_in.png', 'tests/test01_exp.png', 20,
-                                    'tests/test01_enc.txt', 'output/test01_out.txt'))
+    print(jigsaw('tests/test02_in.png', 'tests/test02_exp.png', 4,
+                 'tests/test02_enc.txt', 'output/test02_out.txt'))
 
