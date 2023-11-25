@@ -105,32 +105,49 @@ step     key      deciphering-buffer
 # %%
 import images
 
-def get_tiles(plain_image, tile_size):
-    im = images.load(plain_image)
-    images.visd(im)
-    
-    rows_tiles, cols_tiles = len(im)//tile_size, len(im[0])//tile_size
-    tot_tiles = rows_tiles + cols_tiles
-    tile = []
-    srt = 0
-    r = 0
-    c = 0
-    for r in range(rows_tiles):
-        row = []
-        for c in range(cols_tiles):
-            #while c < tile_size:
-            srt_row, end_row = tile_size*r, tile_size*(r+1)
-            srt_col, end_col = tile_size*c, tile_size*(r+1)
-            i = [x for x in range(tile_size)]
-            a = im[srt_row:end_row][srt_col:end_col]
-            images.visd(a)
+def get_tiles(im_or, im_cryt, n_r, n_c, tile_size):
+    tile_or = []
+    tile_cryt = []
+    for r in range(n_r*tile_size,(n_r+1)*tile_size):
+        row_or = im_or[r][n_c*tile_size:(n_c+1)*tile_size]
+        tile_or.append(row_or)
+        
+        row_cryt = im_cryt[r][n_c*tile_size:(n_c+1)*tile_size]
+        tile_cryt.append(row_cryt)
+    return tile_or, tile_cryt
+
             
+def check_rotation(tile_or, tile_cryt):
+    i = 0
+    decod = ['N', 'R', 'F', 'L']
+    while tile_cryt != tile_or:
+        tile_cryt = [list(r) for r in zip(*tile_cryt[::-1])]
+        #images.visd(tile_cryt)
+        i += 1
+    return decod[i]
         
     
 
 def jigsaw(puzzle_image: str, plain_image: str, tile_size:int, encrypted_file: str, plain_file: str) -> list[str]:
-    get_tiles(plain_image, tile_size)
-
+    im_or = images.load(plain_image)
+    im_cryt = images.load(puzzle_image)
+    
+    tiles_rows = len(im_or)//tile_size
+    tiles_cols = len(im_or[0])//tile_size
+    #images.visd(im_or)
+    #images.visd(im_cryt)
+    print(tiles_rows*tiles_cols)
+    decod_pattern = []
+    for n_r in range(tiles_rows):
+        decod_rows = ''
+        for n_c in range(tiles_cols):
+            tile_or, tile_cryt = get_tiles(im_or, im_cryt, n_r, n_c, tile_size)
+            #images.visd(tile_or)
+            #images.visd(tile_cryt)
+            decod_rows += check_rotation(tile_or, tile_cryt)
+        decod_pattern.append(decod_rows)
+    print(decod_pattern)
+            
 if __name__ == '__main__':
     print(jigsaw('tests/test01_in.png', 'tests/test01_exp.png', 20,
                                     'tests/test01_enc.txt', 'output/test01_out.txt'))
