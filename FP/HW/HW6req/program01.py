@@ -105,7 +105,7 @@ step     key      deciphering-buffer
 # %%
 import images
 
-def get_tiles(im_or, im_cryt, n_r, n_c, tile_size):
+def get_tiles(im_or: list[list[tuple]], im_cryt: list[list[tuple]], n_r: int, n_c: int, tile_size: int) -> list[list[tuple]]:
     tile_or = []
     tile_cryt = []
     for r in range(n_r*tile_size,(n_r+1)*tile_size):
@@ -117,7 +117,7 @@ def get_tiles(im_or, im_cryt, n_r, n_c, tile_size):
     return tile_or, tile_cryt
 
             
-def check_rotation(tile_or, tile_cryt):
+def check_rotation(tile_or: list[list[tuple]], tile_cryt: list[list[tuple]]) -> str:
     i = 0
     decod = ['N', 'R', 'F', 'L']
     while tile_cryt != tile_or:
@@ -126,7 +126,7 @@ def check_rotation(tile_or, tile_cryt):
         i += 1
     return decod[i]
         
-def decryt(encrypted_file, decode_pattern, key_len):
+def decryt(encrypted_file: str, decode_pattern: list[str], key_len: int) -> str:
     decode_raw = ''.join(decode_pattern)
     
     with open(encrypted_file, mode='rt', encoding='utf-8') as fr:
