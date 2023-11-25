@@ -115,8 +115,7 @@ def get_tiles(im_or: list[list[tuple]], im_cryt: list[list[tuple]], n_r: int, n_
         row_cryt = im_cryt[r][n_c*tile_size:(n_c+1)*tile_size]
         tile_cryt.append(row_cryt)
     return tile_or, tile_cryt
-
-            
+  
 def check_rotation(tile_or: list[list[tuple]], tile_cryt: list[list[tuple]]) -> str:
     i = 0
     decod = ['N', 'R', 'F', 'L']
@@ -125,7 +124,7 @@ def check_rotation(tile_or: list[list[tuple]], tile_cryt: list[list[tuple]]) -> 
         #images.visd(tile_cryt)
         i += 1
     return decod[i]
-        
+    
 def decryt(encrypted_file: str, decode_pattern: list[str], key_len: int) -> str:
     decode_raw = ''.join(decode_pattern)
     
@@ -151,7 +150,6 @@ def decryt(encrypted_file: str, decode_pattern: list[str], key_len: int) -> str:
                 fr[0] = s
     return ''.join(fr)
                 
-    
 
 def jigsaw(puzzle_image: str, plain_image: str, tile_size:int, encrypted_file: str, plain_file: str) -> list[str]:
     im_or = images.load(plain_image)
@@ -185,6 +183,6 @@ def jigsaw(puzzle_image: str, plain_image: str, tile_size:int, encrypted_file: s
     
             
 if __name__ == '__main__':
-    print(jigsaw('tests/test02_in.png', 'tests/test02_exp.png', 4,
-                 'tests/test02_enc.txt', 'output/test02_out.txt'))
+    print(jigsaw('tests/test09_in.png', 'tests/test09_exp.png', 100,
+                 'tests/test09_enc.txt', 'output/test09_out.txt'))
 
