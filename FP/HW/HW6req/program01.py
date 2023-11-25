@@ -128,10 +128,10 @@ def check_rotation(tile_or, tile_cryt):
         
 def decryt(encrypted_file, decode_pattern, key_len):
     decode_raw = ''.join(decode_pattern)
-    beth = 'abcdefghijklmnopqrstwxyz'
     
     with open(encrypted_file, mode='rt', encoding='utf-8') as fr:
         fr = list(fr.read())
+        l = len(fr)-1
         
         for i in range(len(fr)):
             key = decode_raw[i%key_len]
@@ -139,12 +139,12 @@ def decryt(encrypted_file, decode_pattern, key_len):
                 fr[i] = chr(ord(fr[i])+1)
             elif key == 'L':
                 fr[i] = chr(ord(fr[i])-1)
-            elif key == 'F' and i != len(fr)-1:
+            elif key == 'F' and i != l:
                 s = fr[i]
                 n = fr[i+1]
                 fr[i] = n
                 fr[i+1] = s
-            elif key == 'F' and i == len(fr)-1:
+            elif key == 'F' and i == l:
                 s = fr[i]
                 n = fr[0]
                 fr[i] = n
