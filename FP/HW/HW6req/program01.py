@@ -105,7 +105,7 @@ step     key      deciphering-buffer
 # %%
 import images
 
-def get_tiles(im_or: list[list[tuple]], im_cryt: list[list[tuple]], n_r: int, n_c: int, tile_size: int) -> list[list[tuple]]:
+def get_tiles(im_or, im_cryt, n_r, n_c, tile_size):
     tile_or = []
     tile_cryt = []
     for r in range(n_r*tile_size,(n_r+1)*tile_size):
@@ -116,7 +116,7 @@ def get_tiles(im_or: list[list[tuple]], im_cryt: list[list[tuple]], n_r: int, n_
         tile_cryt.append(row_cryt)
     return tile_or, tile_cryt
   
-def check_rotation(tile_or: list[list[tuple]], tile_cryt: list[list[tuple]]) -> str:
+def check_rotation(tile_or, tile_cryt):
     i = 0
     decod = ['N', 'R', 'F', 'L']
     while tile_cryt != tile_or:
@@ -125,7 +125,7 @@ def check_rotation(tile_or: list[list[tuple]], tile_cryt: list[list[tuple]]) -> 
         i += 1
     return decod[i]
     
-def decryt(encrypted_file: str, decode_pattern: list[str], key_len: int) -> str:
+def decryt(encrypted_file, decode_pattern, key_len):
     decode_raw = ''.join(decode_pattern)
     
     with open(encrypted_file, mode='rt', encoding='utf-8') as fr:
@@ -151,7 +151,7 @@ def decryt(encrypted_file: str, decode_pattern: list[str], key_len: int) -> str:
     return ''.join(fr)
                 
 
-def jigsaw(puzzle_image: str, plain_image: str, tile_size:int, encrypted_file: str, plain_file: str) -> list[str]:
+def jigsaw(puzzle_image: str, plain_image: str, tile_size: int, encrypted_file: str, plain_file: str) -> list[str]:
     im_or = images.load(plain_image)
     im_cryt = images.load(puzzle_image)
     
