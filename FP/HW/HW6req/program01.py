@@ -152,7 +152,7 @@ def decryt(encrypted_file, decode_pattern, key_len):
                 
 
 def jigsaw(puzzle_image: str, plain_image: str, tile_size: int, encrypted_file: str, plain_file: str) -> list[str]:
-    im_or = images.load(plain_image)
+    im_or, im_cryt = images.load(plain_image)
     im_cryt = images.load(puzzle_image)
     
     tiles_rows = len(im_or)//tile_size
