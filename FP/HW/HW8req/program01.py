@@ -43,14 +43,48 @@ NOTA: almeno una delle funzioni o metodi che realizzate deve essere ricorsiva
 NOTA: la funzione/metodo ricorsivo/o deve essere definita a livello più esterno
       altrimenti fallirete il test di ricorsione.
 '''
+import json
+
+def translate(encrypted, original, new):
+    l = len(original)+1
+    #original = list(original)
+    translated = list(encrypted)
+    print(original)
+    i = 0
+    while i < len(translated):
+        #print(''.join(translated[i:i+l]))
+        if all(x in list(translated[i:i+l]) for x in original):
+            translated[i:i+l] = new
+        i += 1
+    return ''.join(translated)
+
+
+#def recurs():
+    
 
 def pharaohs_revenge(encrypted_text : str, pharaohs_cypher : dict[str,str]) -> set[str]:
-    pass
-    # inserisci qui la tua implementazione
+    i = 0
+    while i < 3:
+        for k, v in pharaohs_cypher.items():
+            k = list(k)
+            encrypted_text = translate(encrypted_text, k, v)
+            print(encrypted_text)
+        i += 1
 
 
 
 
 if __name__ == '__main__':
-    pass
-    # inserisci qui i tuoi test personali
+    file = 'tests/normal/example.json'
+    with open(file) as json_file:
+        data = json.load(json_file)
+        encrypted_text  = data['encrypted_text']
+        pharaohs_cypher = data['pharaohs_cypher']
+        expected        = set(data['expected'])
+    pharaohs_revenge(encrypted_text, pharaohs_cypher)
+    #translate(encrypted_text, 'sorta', 'tur')
+    #print(encrypted_text, pharaohs_cypher)
+    #for k, v in pharaohs_cypher.items():
+    #    print(k, v)
+        
+        
