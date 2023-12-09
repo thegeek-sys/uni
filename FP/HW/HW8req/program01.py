@@ -47,7 +47,7 @@ NOTA: la funzione/metodo ricorsivo/o deve essere definita a livello più esterno
 
 #@profile
 def trans_recurs(encrypted_list, k, v, j, q=0):
-    k_list = len(k)-1
+    #k_list = len(k)-1
     while q < len(k):
         l_key = len(k[q])+1
         translated = list(encrypted_list[j])
@@ -66,9 +66,8 @@ def trans_recurs(encrypted_list, k, v, j, q=0):
                 if ''.join(new) not in encrypted_list:
                     #print(encrypted_list)
                     return trans_recurs(encrypted_list+[''.join(new)], k, v, j, q)
-            elif (q == k_list) and (i == l_translated):
-                if j+1 != len(encrypted_list):
-                    return trans_recurs(encrypted_list, k, v, j+1)
+            elif (q == k_list) and (i == l_translated) and (j+1 != len(encrypted_list)):
+                return trans_recurs(encrypted_list, k, v, j+1)
             i += 1
         q += 1
     #print(encrypted_list)
@@ -78,8 +77,10 @@ def trans_recurs(encrypted_list, k, v, j, q=0):
     
 
 def pharaohs_revenge(encrypted_text : str, pharaohs_cypher : dict[str,str]) -> set[str]:
+    global k_list
     k = list(pharaohs_cypher.keys())
     v = list(pharaohs_cypher.values())
+    k_list = len(k)-1
     decrytted_list = trans_recurs([encrypted_text], k, v, 0)
     min_len = min(len(el) for el in decrytted_list)
     return {shortest for shortest in decrytted_list if len(shortest) == min_len}
