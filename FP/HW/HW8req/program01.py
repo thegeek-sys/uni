@@ -50,7 +50,8 @@ def trans_recurs(encrypted_list, k, v, j, q=0):
     while q < len(k):
         l_key = len(k[q])+1
         translated = list(encrypted_list[j])
-        l_translated = len(translated)-len(k[q])
+        l_translated = len(translated)-l_key
+        l_translated = (l_translated if l_translated >= 0 else 0)
         i = 0
         while i <= l_translated:
             #w = ''.join(translated[i:i+l_key])
