@@ -51,22 +51,53 @@ def trans_recurs(encrypted_list, k, v, j, q=0):
     while q < len(k):
         l_key = len(k[q])+1
         translated = list(encrypted_list[j])
-        l_translated = len(translated)-1
+        l_translated = len(translated)-l_key
         #print(k)
+        if l_translated == -1:
+            l_translated += 1
         i = 0
-        while i <= len(translated):
+        while i <= l_translated:
             #w = ''.join(translated[i:i+l_key])
             #y = k[q]
             #z = encrypted_list[j]
             #print()
-            #print(''.join(translated[i:i+l]))
-            if all(x in translated[i:i+l_key] for x in k[q]):
+            #if i+l_key > len(translated):
+            #    i-=1
+            #print(''.join(translated[i:i+l_key]))
+            #sort = sorted()
+                    
+            #if diff <= 1:
+            #    new = translated[:]
+            #    new[i:i+l_key] = v[q]
+            #    if ''.join(new) not in encrypted_list:
+            #        return trans_recurs(encrypted_list+[''.join(new)], k, v, j, q)
+            #if (q >= k_list) and (i >= l_translated) and (j+1 != len(encrypted_list)):
+            #    return trans_recurs(encrypted_list, k, v, j+1)
+            
+            '''all_freq = {}
+            for z in k[q]:
+                all_freq[z] = all_freq.get(z, 0) + 1'''
+            
+            '''if j==41 and q==2 and i== 1:
+                print('ao')
+            
+            if ''.join(translated[i:i+l_key]) == 'dcc' and k[q] == 'cc':
+                print('ciao')'''
+
+            #if all(x in translated[i:i+l_key] for x in k[q]):
+            if all(''.join(translated[i:i+l_key]).count(x) >= k[q].count(x) for x in k[q]):
+            #if all(translated[i:i+l_key].count(x) >= all_freq[x] for x in all_freq):
+                #print('sostituzione')
                 new = translated[:]
                 new[i:i+l_key] = v[q]
+                '''if new == ['d']:
+                    print(k[q])
+                    print(''.join(new), ''.join(translated[i:i+l_key]))
+                    print()'''
                 if ''.join(new) not in encrypted_list:
                     #print(encrypted_list)
                     return trans_recurs(encrypted_list+[''.join(new)], k, v, j, q)
-            elif (q == k_list) and (i == l_translated) and (j+1 != len(encrypted_list)):
+            if (q == k_list) and (i == l_translated) and (j+1 != len(encrypted_list)):
                 return trans_recurs(encrypted_list, k, v, j+1)
             i += 1
         q += 1
@@ -89,13 +120,19 @@ def pharaohs_revenge(encrypted_text : str, pharaohs_cypher : dict[str,str]) -> s
 
 
 if __name__ == '__main__':
-    file = 'tests/normal/test__4_3.json'
-    with open(file) as json_file:
+    '''file = 'tests/normal/test__4_3.json'
+    with open(file, encoding='utf-8') as json_file:
         data = json.load(json_file)
         encrypted_text  = data['encrypted_text']
         pharaohs_cypher = data['pharaohs_cypher']
         expected        = set(data['expected'])
-    pharaohs_revenge(encrypted_text, pharaohs_cypher)
+    res = pharaohs_revenge(encrypted_text, pharaohs_cypher)
+    assert res == expected'''
+    encrypted_text=  "aaabaaac"
+    pharaohs_cypher= {"aa":"bc","bb":"c","cc":"d"}
+    expected=        { "d" }
+    res = pharaohs_revenge(encrypted_text, pharaohs_cypher)
+    print(res)
 
         
         
