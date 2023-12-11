@@ -53,18 +53,17 @@ class Test(testlib.TestCase):
         jsonfile = 'tests/normal/example.json'
         self.do_test(jsonfile)
 
-    @data('1_3', '1_4', '1_5', '1_6', '1_7', '1_8', '2_3', '2_4', '2_5', '3_4', '4_3', )
+    def test_multichar(self):
+        jsonfile = 'tests/normal/multichar.json'
+        self.do_test(jsonfile)
+
+    @data('1_3', '1_4', '1_5', '1_6', '1_7', '1_8', '2_3', '2_4', '2_5', '3_4', '4_3', 
+          '2_4_new', '1_6_new', '3_4_new', '3_3_new' )
     def test_normal(self, test_id):
-            jsonfile = f'tests/normal/test__{test_id}.json'
-            self.do_test(jsonfile)
+        jsonfile = f'tests/normal/test__{test_id}.json'
+        self.do_test(jsonfile)
 
     ######################### SECRET TESTS START HERE! #########################
-    '''
-    @data('1_4', '1_5', '1_6', '1_7', '1_8', '2_3', '2_4', '3_4', )
-    def test_secret(self, test_id):
-            jsonfile = f'tests/secret/test__{test_id}.json'
-            self.do_test(jsonfile)
-    '''
 
 if __name__ == '__main__':
     Test.main()
