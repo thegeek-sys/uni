@@ -97,29 +97,22 @@ Nota 5: potete usare le funzioni della libreria 'os' per creare le directory nec
 (ad esempio os.makedirs)
 '''
 
+
+import builtins
+if 'profile' not in dir(builtins):
+    def profile(X) : return X
+
 import os
 
 #@profile
-def add_to_out(i, segno, same, out, nota, durata, total, no_duration):
-    if segno or same:
-        out += nota+str(durata)
-        total += durata
-        durata = 0
-    else:
-        out += no_duration[i]+'1'
-        total += 1
-        i+=1
-    return out, total, durata, i
-
-#@profile
 def count_segno(i, nota, no_duration, durata):
-    while no_duration[i] == nota[0] and no_duration[i+1] == nota[1]:
+    while no_duration[i:i+2] == nota:
         durata += 1
-        segno = True
         i+=2
-    return durata, segno, nota, i
+    return durata, True, nota, i
 
 #@profile
+<<<<<<< HEAD
 def count_same(i, no_duration, nota):
     same = True
     j = 1
@@ -131,9 +124,20 @@ def count_same(i, no_duration, nota):
 #@profile
 def translate_files(pretty_files: dict, translation_table) -> dict[str:str]:
     
-    duration = {}
+=======
+def count_same(i, no_duration, nota, l):
+    j = i
+    while i<l and no_duration[i+1] not in '#b' and no_duration[i] == nota:
+        i += 1
+    return i-j, True, i, nota
+    
 
+#@profile
+def translate_files(pretty_files: dict, translation_table: str) -> dict[str:str]:
+>>>>>>> 4a6cb4c023f1bdee192205cdb0b4a8b1695a758e
+    duration = {}
     for file, song in pretty_files.items():
+<<<<<<< HEAD
         print(file)
         out = nota = ''
         no_duration = str(song.translate(translation_table))
@@ -146,41 +150,69 @@ def translate_files(pretty_files: dict, translation_table) -> dict[str:str]:
                 durata, same, i, nota = count_same(i, no_duration[i:], no_duration[i])
             elif no_duration[i+1] in '#b' and not same and not segno:
                 durata, segno, nota, i = count_segno(i, no_duration[i]+no_duration[i+1], no_duration, durata)
+=======
+        out = ''
+        no_duration = str(song.translate(translation_table))+'\n\n'
+        i = durata = total = 0
+        segno = same = False
+        l = len(no_duration)-1
+        while i < l:
+            if no_duration[i] == no_duration[i+1] and segno==same==False:
+                durata, same, i, nota = count_same(i, no_duration, no_duration[i], l)                
+            elif no_duration[i+1] in '#b' and segno==same==False:
+                durata, segno, nota, i = count_segno(i, no_duration[i:i+2], no_duration, durata)
+>>>>>>> 4a6cb4c023f1bdee192205cdb0b4a8b1695a758e
             else:
-                out, total, durata, i = add_to_out(i, segno, same, out, nota, durata, total, no_duration)
-                segno=same=False
+                if segno or same:
+                    out += nota+str(durata)
+                    total += durata
+                    durata = 0
+                    segno=same=False
+                else:
+                    out += no_duration[i]+'1'
+                    total += 1
+                    i+=1
         with open(file, mode='wt', encoding='utf-8') as fw:
             fw.write(out.rstrip())
 
+<<<<<<< HEAD
         duration[file.split('/')[-1].replace('.txt','')] = total
         #print(os.path.basename(file))
         #duration[os.path.basename(file).replace('.txt','')] = total
     #return out, total
+=======
+        duration[os.path.basename(file)[:-4]] = total
+>>>>>>> 4a6cb4c023f1bdee192205cdb0b4a8b1695a758e
     return duration
-                    
-                
-                
-        
 
+
+#@profile
 def sanitize_txt(source: str, titles: dict, dest: str) -> list:
     pretty_files = {}
     for title, path_rel in titles.items():
         dir_name = os.path.dirname(path_rel)
         file_name = os.path.basename(path_rel)
         path = f'{dest}/{dir_name}'
-        #path = os.path.join(dest, os.path.dirname(path_rel.split('/', 1)[1]))
         
         os.makedirs(path, exist_ok=True)
+<<<<<<< HEAD
         #path += '/'+title+'.txt'
         
         with open(f'{source}/{dir_name}/{file_name}', mode='rt', encoding='utf-8') as song:
             sanitized = ''.join(line[::-1].replace('\n', '') for line in song)
         
         #pretty_files[os.path.join(path, f'{title}.txt')] = sanitized
+=======
+        
+        with open(f'{source}/{dir_name}/{file_name}', mode='rt', encoding='utf-8') as song:
+            sanitized = ''.join(line[::-1].strip('\n') for line in song)
+    
+>>>>>>> 4a6cb4c023f1bdee192205cdb0b4a8b1695a758e
         pretty_files[f'{path}/{title}.txt'] = sanitized
 
     return pretty_files
 
+#@profile
 def get_titles_files(directory: str) -> dict:
     titles = {}
 
@@ -190,7 +222,8 @@ def get_titles_files(directory: str) -> dict:
             titles[title] = path_rel
 
     return titles
-        
+
+#@profile    
 def Umkansanize(source_root:str, target_root:str) -> dict[str,int]:
     notes = {'0': 'A', '1': 'B', '2': 'C', '3': 'D', '4': 'E', '5': 'F', '6': 'G', '-': 'b', '+': '#', ' ': 'P'}
     translation_table = str.maketrans(notes)

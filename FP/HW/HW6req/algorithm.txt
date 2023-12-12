@@ -1,0 +1,11 @@
+def get_tiles:
+data un'immagine intera, mi restituisce in output ogni singolo tile dell'immagine crittata e dell'immagine originale che poi vengono dati in input a check_rotation
+
+def check_rotation:
+preso il tile crittato e il tile originale in input, vengono confrontati e il crittato viene roteato a destra finché non sono uguali in un controllo effettuato tramite ciclo while. nel while è anche presente un contatore di rotazioni, che, al termine del while, viene trasformato nella lettera corrispondente (0:N, 1:R, 2:F, 3:L), valore che viene restituito in output. in una funzione separata tutti questi valori verranno messi insieme a formare la chiave di decrittazione
+
+def decryt:
+prende in input il file di testo crittato, il pattern di decrittazione (calcolato da check_rotation) e la lunghezza del pattern. quindi converto il contenuto del file di testo in una lista e attraverso delle manipolazioni effettuate utilizzando degli if, mi calcolo una stringa contenente il testo in chiaro. stringa che viene restituita in output
+
+def jigsaw (main):
+prima di tutto mi carico le due immagini (crittata e in chiaro) che vengono passare in input a get_tiles e appendo l'output diviso per righe di check_rotation alla lista decode_pattern. questa lista viene quindi data in pasto a decryt insieme a al file di testo crittato e la lunghezza della chiave. salvo l'output di decryt dento la stringa decrytted. la stringa decrytted viene quindi scritta dentro plain_file (ovvero il file di destinazione che deve contenere il testo in chiaro). restituisco infine in output decode_pattern

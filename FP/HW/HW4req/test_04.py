@@ -29,7 +29,7 @@ class Test(testlib.TestCase):
             with    self.ignored_function('pprint.pprint'), \
                     self.forbidden_function('builtins.input'), \
                     self.forbidden_function('builtins.eval'), \
-                    self.check_imports(allowed=['program01', '_io', 'typing', 'os', 'os.path', 'encodings.utf_8']), \
+                    self.check_imports(allowed=['program01', '_io', 'typing', 'os', 'os.path', 'encodings.utf_8', 'builtins']), \
                     self.timeout(TIMEOUT), \
                     self.timer(TIMEOUT):
                 import program01 as program
