@@ -81,6 +81,7 @@ def pharaohs_revenge(encrypted_text : str, pharaohs_cypher : dict[str,str]) -> s
 
 
 
+
 if __name__ == '__main__':
     file = 'tests/normal/test__4_3.json'
     with open(file, encoding='utf-8') as json_file:
