@@ -54,11 +54,6 @@ def trans_recurs(encrypted_list, k, v, j, q=0):
         l_translated = (l_translated if l_translated >= 0 else 0)
         i = 0
         while i <= l_translated:
-            #w = ''.join(translated[i:i+l_key])
-            #y = k[q]
-            #z = encrypted_list[j]
-            #print()
-
             if all(translated[i:i+l_key].count(x) >= k[q].count(x) for x in k[q]):
                 new = translated[:]
                 new[i:i+l_key] = v[q]
@@ -72,7 +67,6 @@ def trans_recurs(encrypted_list, k, v, j, q=0):
         q += 1
     return encrypted_list
     
-
     
 
 def pharaohs_revenge(encrypted_text : str, pharaohs_cypher : dict[str,str]) -> set[str]:
@@ -82,8 +76,8 @@ def pharaohs_revenge(encrypted_text : str, pharaohs_cypher : dict[str,str]) -> s
     k_list = len(k)-1
     decrytted_list = trans_recurs([encrypted_text], k, v, 0)
     min_len = min(len(el) for el in decrytted_list)
+    del k_list
     return {shortest for shortest in decrytted_list if len(shortest) == min_len}
-
 
 
 
