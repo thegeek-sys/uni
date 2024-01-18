@@ -249,7 +249,7 @@ def recu1(strings, let, n, num=1):
         
         for i in let:
             for j in strings:
-                if not i.endswith(j):
+                if not j in i:
                     rez.add(i+j)
         rez = recu1(strings, rez, n, num+1)
         # rez = rez | part
@@ -261,6 +261,7 @@ def ex2(strings, n):
     for let in strings:
         rez = recu1(strings-{let}, [let], n)
         a = a|rez
+    a = sorted(a, key=lambda x: (-len(x), x))
     return a
         
 
