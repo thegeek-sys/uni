@@ -112,19 +112,6 @@ def count_segno(i, nota, no_duration, durata):
     return durata, True, nota, i
 
 #@profile
-<<<<<<< HEAD
-def count_same(i, no_duration, nota):
-    same = True
-    j = 1
-    while j+1 <= len(no_duration)-1 and no_duration[j] == nota and no_duration[j+1] not in '#b':
-        j += 1
-    return j, same, j+i, nota
-    
-
-#@profile
-def translate_files(pretty_files: dict, translation_table) -> dict[str:str]:
-    
-=======
 def count_same(i, no_duration, nota, l):
     j = i
     while i<l and no_duration[i+1] not in '#b' and no_duration[i] == nota:
@@ -134,23 +121,8 @@ def count_same(i, no_duration, nota, l):
 
 #@profile
 def translate_files(pretty_files: dict, translation_table: str) -> dict[str:str]:
->>>>>>> 4a6cb4c023f1bdee192205cdb0b4a8b1695a758e
     duration = {}
     for file, song in pretty_files.items():
-<<<<<<< HEAD
-        print(file)
-        out = nota = ''
-        no_duration = str(song.translate(translation_table))
-        no_duration += '\n\n'
-        i= durata = 0
-        segno=same=False
-        total = 0
-        while i < len(no_duration)-1:
-            if no_duration[i] == no_duration[i+1] and not segno and not same:
-                durata, same, i, nota = count_same(i, no_duration[i:], no_duration[i])
-            elif no_duration[i+1] in '#b' and not same and not segno:
-                durata, segno, nota, i = count_segno(i, no_duration[i]+no_duration[i+1], no_duration, durata)
-=======
         out = ''
         no_duration = str(song.translate(translation_table))+'\n\n'
         i = durata = total = 0
@@ -161,7 +133,6 @@ def translate_files(pretty_files: dict, translation_table: str) -> dict[str:str]
                 durata, same, i, nota = count_same(i, no_duration, no_duration[i], l)                
             elif no_duration[i+1] in '#b' and segno==same==False:
                 durata, segno, nota, i = count_segno(i, no_duration[i:i+2], no_duration, durata)
->>>>>>> 4a6cb4c023f1bdee192205cdb0b4a8b1695a758e
             else:
                 if segno or same:
                     out += nota+str(durata)
@@ -175,14 +146,7 @@ def translate_files(pretty_files: dict, translation_table: str) -> dict[str:str]
         with open(file, mode='wt', encoding='utf-8') as fw:
             fw.write(out.rstrip())
 
-<<<<<<< HEAD
-        duration[file.split('/')[-1].replace('.txt','')] = total
-        #print(os.path.basename(file))
-        #duration[os.path.basename(file).replace('.txt','')] = total
-    #return out, total
-=======
         duration[os.path.basename(file)[:-4]] = total
->>>>>>> 4a6cb4c023f1bdee192205cdb0b4a8b1695a758e
     return duration
 
 
@@ -195,19 +159,10 @@ def sanitize_txt(source: str, titles: dict, dest: str) -> list:
         path = f'{dest}/{dir_name}'
         
         os.makedirs(path, exist_ok=True)
-<<<<<<< HEAD
-        #path += '/'+title+'.txt'
-        
-        with open(f'{source}/{dir_name}/{file_name}', mode='rt', encoding='utf-8') as song:
-            sanitized = ''.join(line[::-1].replace('\n', '') for line in song)
-        
-        #pretty_files[os.path.join(path, f'{title}.txt')] = sanitized
-=======
         
         with open(f'{source}/{dir_name}/{file_name}', mode='rt', encoding='utf-8') as song:
             sanitized = ''.join(line[::-1].strip('\n') for line in song)
     
->>>>>>> 4a6cb4c023f1bdee192205cdb0b4a8b1695a758e
         pretty_files[f'{path}/{title}.txt'] = sanitized
 
     return pretty_files
