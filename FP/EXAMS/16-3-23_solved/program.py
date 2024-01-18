@@ -361,27 +361,32 @@ Esempio:
    A-BC-DEFG-HIJKLMN
   """
 
-def alb(root):
-    rez = []
-    if not root.right and not root.left:
-        rez.append(root.value)
-    elif root.left:
-        part = alb(root.left)
-        rez = rez+part
-    elif root.right:
-        part = alb(root.right)
-        rez = rez+part
+def alb(root, l=0):
+    rez = {}
+    rez[l] = rez.get(l, [])+[root.value]
+
+    if root.left:
+        part = alb(root.left, l+1)
+        for k, v in part.items():
+            rez[k] = rez.get(k, [])+v
+    if root.right:
+        part = alb(root.right, l+1)
+        for k, v in part.items():
+            rez[k] = rez.get(k, [])+v
     return rez
 
 def ex2(root):
     ls = alb(root)
-    return ls
+    print(ls)
+    rez = [''.join(x) for x in ls.values()]
+    
+    return '-'.join(rez)
 
 
 
-from tree import BinaryTree
-root = BinaryTree.fromList(['A', ['B',[],['D',[],[]]], ['C', ['E',[],[]], ['F',[],[]]]])
-print(ex2(root))
+# from tree import BinaryTree
+# root = BinaryTree.fromList(['A', ['B',[],['D',[],[]]], ['C', ['E',[],[]], ['F',[],[]]]])
+# print(ex2(root))
 # root = BinaryTree.fromList(['A', ['B',['D',['H',[],[]],['I',[],[]]],['E',[],['J',[],[]]]], ['C', ['F',['K',[],[]],['L',[],[]]], ['G',['M',[],[]],['N',[],[]]]]])
 # print(ex2(root))
 # root = BinaryTree.fromList(['A', ['B',['D',['H',['L',[],[]],[]],[]],['E',[],['I',[],[]]]],['C', ['F',['J',[],[]],[]],['G',[],['K',[],['M',[],[]]]]]])
@@ -389,10 +394,4 @@ print(ex2(root))
 ###################################################################################
 if __name__ == '__main__':
     # Place your tests here
-    print('*'*50)
-    print('ITA\nDevi eseguire il grade.py se vuoi debuggare con il grader incorporato.')
-    print('Altrimenii puoi inserire qui del codice per testare le tue funzioni ma devi scriverti i casi che vuoi testare')
-    print('*'*50)
-    print('ENG\nYou have to run grade.py if you want to debug with the automatic grader.')
-    print('Otherwise you can insert here you code to test the functions but you have to write your own tests')
-    print('*'*50)
+    pass

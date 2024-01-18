@@ -4,7 +4,7 @@ save_data_on_exit = True
 save_history = True
 save_non_project_files = False
 project_type = 'empty-project-type'
-recent_files = ['FP/EXAMS/exam_simulation_20_12_2022/program.py', 'FP/EXAMS/exam_simulation_20_12_2022/grade.py', 'FP/EXAMS/exam_simulation_20_12_2022/testlib.py']
+recent_files = ['FP/EXAMS/26-1-23/program.py', 'FP/EXAMS/26-1-23/grade.py', 'FP/EXAMS/26-1-23/testlib.py']
 
 [main]
 version = 0.2.0
