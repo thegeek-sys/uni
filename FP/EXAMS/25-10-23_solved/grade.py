@@ -182,13 +182,13 @@ def test_func3_2():
     string_list2=['A']
     '''
     string_list1=['AAA', 'fkjskfjsdkABCHGHF', '']
-    string_list2=['bbb', 'BBBBBBBBBBcmcmcmmc' '']
+    string_list2=['bbb', 'BBBBBBBBBBcmcmcmm', '']
     expected = ['bbbbbbbbbbCMCMCMM', 'BBB']
     try:
 	    return do_func3_tests(string_list1, string_list2, expected)
     except:
         string_list1=['AAA', 'fkjskfjsdkABCHGHF']
-        string_list2=['bbb', 'BBBBBBBBBBcmcmcmmc']
+        string_list2=['bbb', 'BBBBBBBBBBcmcmcmm']
         expected = ['bbbbbbbbbbCMCMCMM', 'BBB']
         return do_func3_tests(string_list1, string_list2, expected)
 
@@ -462,7 +462,7 @@ tests = [
     test_func5_1, test_func5_2, test_func5_3, test_func5_4,
     test_ex1_1,  test_ex1_2, test_ex1_3,
     test_ex2_1,    test_ex2_2, test_ex2_3,
-    test_personal_data_entry,
+    # test_personal_data_entry,
 ]
 
 

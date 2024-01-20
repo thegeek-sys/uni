@@ -51,8 +51,12 @@ contenente le stringhe presenti soltanto in una delle due liste in ingresso
 dev'essere ordinata in ordine alfabetico inverso.
 '''
 def func1(string_list1, string_list2):
-    # Inserire qui il proprio codice
-    pass
+    string_list1 = set(string_list1)
+    string_list2 = set(string_list2)
+    rez = string_list1 ^ string_list2
+    rez = sorted(rez, reverse=True)
+    return rez
+
 
 
 # %% ----------------------------------- FUNC2 ------------------------- #
@@ -68,8 +72,9 @@ Esempio: se a_string='welcome' l'invocazione di func2(a_string) dovrà
 '''
 
 def func2(a_string):
-    # scrivi qui il tuo codice
-    pass
+    a_string = set(a_string)
+    a_string = sorted(a_string, reverse=True)
+    return ''.join(a_string)
 
 # print(func2('welcome'))
 
@@ -116,8 +121,19 @@ NOTA: si usino le funzioni delle stringhe isupper(), lower() etc.
 
 
 def func3(string_list1, string_list2):
-    # scrivi qui il tuo codice
-    pass
+    rez = []
+    for i in range(len(string_list1)):
+        part = list(string_list2[i])
+        for j in range(len(string_list1[i])):
+            if string_list1[i][j].isupper():
+                part[j] = part[j].upper()
+            else:
+                part[j] = part[j].lower()
+        rez.append(''.join(part))
+    
+    rez = sorted(rez, key= lambda x: (-len(x), x))
+    return rez
+                
 
 # string_list1=['sO', 'sIn', 'VAS', 'rin', 'VUL']
 # string_list2=['ce', 'cas', 'too', 'ceo', 'sia']
@@ -167,8 +183,37 @@ e ritornare il valore 7.
 
 
 def func4(input_filename, output_filename, length):
-    ## Write your code here
-    pass
+    # whole = []
+    with open(input_filename, mode='rt') as fr:
+        whole = fr.read().split()
+    
+    whole = sorted(whole, key = lambda x: (x[0].lower(), x.lower(), x))
+    
+    num = 0
+    for x in whole[::-1]:
+        if len(x) == length:
+            num += 1
+        else:
+            whole.remove(x)
+    
+    rez = []
+    last = False
+    a = []
+    for x in whole:
+        if not last or last == x[0].lower():
+            a.append(x)
+        else:
+            rez.append(sorted(a, key=lambda x: (len(x), x.lower(), x)))
+            a.clear()
+            a.append(x)
+        last = x[0].lower()
+    if a != []:
+        rez.append(sorted(a, key=lambda x: (len(x), x.lower(), x)))
+        
+    with open(output_filename, mode='wt') as fw:
+        for x in rez:
+            fw.write(' '.join(x)+'\n')
+    return num
 
 # print(func4('func4/func4_test1.txt', 'func4/func4_out1.txt', 3))
 
@@ -241,41 +286,26 @@ def func5(txt_input, width, height, png_output):
         row = coords[1]
         col = coords[0]
         
-        while row < 0 or col < 0:
-            row += 1
-            col += 1
-        
-        while row > height-1 or col > width-1:
-            row -= 1
-            col -= 1
-        
-        row = min(max(row, 0), height-1)
-        col = min(max(col, 0), width-1)
         if ty.endswith('DOWN'):
             down += 1
             for pix in range(pixs):
-                if row > height-1 or col > width-1:
-                    break
-                # img[min(row, height-1)][min(col, width-1)] = color
-                img[row][col] = color
+                if 0 <= row <= height-1 and 0 <= col <= width-1:
+                    img[row][col] = color
                 row += 1
                 col += 1
-                
         elif ty.endswith('UP'):
             up += 1
             for pix in range(pixs):
-                if row < 0 or col > width-1:
-                    break
-                # img[max(row, 0)][min(col, height-1)] = color
-                img[row][col] = color
+                if 0 <= row <= height-1 and 0 <= col <= width-1:
+                    img[row][col] = color
                 row -= 1
                 col += 1
     
     images.save(img, png_output)
-    return (down,up)
+    return (up,down)
     
 
-print(func5('func5/in_1.txt', 50, 100, 'func5/out_1.png'))
+# print(func5('func5/in_1.txt', 50, 100, 'func5/out_1.png'))
 
 
 # %% ----------------------------------- EX.1 ------------------------- #
@@ -295,10 +325,33 @@ Esempio:
     {'ab', 'ba', 'ac', 'ca', 'bc', 'cb'}
 """
 
+def aux_1(cur, a_set, n, l=1):
+    rez = set()
+    
+    if n == l:
+        return cur
+    else:
+        for i in cur:
+            for j in a_set:
+                if not j in i:
+                    rez.add(j+i)
+        rez = aux_1(rez, a_set, n, l+1)
+    return rez
+
 def ex1(a_set, n):
-    # INSERT HERE YOUR CODE
-    pass
-# print(ex1({'a','b','c'}, 2))
+    # a_list = list(a_set)
+    out = set()
+    for x in a_set:
+        p = aux_1({x}, a_set, n)
+        out = p|out
+    return out
+
+# a_set = {'a', 'bc', 'def', 'ghij', 'klmno', 'pqrstu', 'vwxyz'}
+
+# expected = {'cda', 'bad', 'dac', 'cab', 'bca', 'cdb', 'adc', 'bac', 'dba', 'dcb', 'adb', 'dbc', 'bda', 'abc', 'bcd', 'cba', 'cad', 'dab', 'dca', 'acd', 'acb', 'abd', 'cbd', 'bdc'}
+# print(expected)
+# print(ex1(a_set, 4))
+# print(ex1({'a','b','c','d'}, 3)==expected)
 
 # ----------------------------------- EX.2 ----------------------------------- #
 
@@ -331,17 +384,34 @@ inferiore (rispettivamente 1 e 2).
 """
 import tree
 
+def aux_2(root, k, l=0):
+    rez = []
+    if root.value%k == 0:
+        rez.append(l)
+    
+    if root.left:
+        p = aux_2(root.left, k, l+1)
+        rez = rez+p
+    
+    if root.right:
+        p = aux_2(root.right, k, l+1)
+        rez = rez+p
+    
+    return rez
+        
+
 def ex2(node, k):
-    # INSERISCI QUI IL TUO CODICE
-    pass
+    rez = aux_2(node, k)
+    try:
+        return max(rez)
+    except ValueError:
+        return -1
+
+itree = tree.BinaryTree.fromList([1, [25, [3, [4, None, None], [55, None, None]], [65, None, None]], [7, None, None]])
+print(itree)
+print(ex2(itree, 5))
 
 ###################################################################################
 if __name__ == '__main__':
     # Place your tests here
-    print('*' * 50)
-    print('ITA\nEseguire grade.py per effettuare il debug con grader incorporato.')
-    print('Altrimenti, inserire codice qui per verificare le funzioni con test propri')
-    print('*' * 50)
-    print('ENG\nRun grade.py to debug the code with the automatic grader.')
-    print('Alternatively, insert here the code to check the functions with custom test inputs')
-    print('*' * 50)
+    pass

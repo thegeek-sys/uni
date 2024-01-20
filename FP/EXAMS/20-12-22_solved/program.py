@@ -259,7 +259,7 @@ def recu1(strings, let, n, num=1):
 def ex2(strings, n):
     a = set()
     for let in strings:
-        rez = recu1(strings-{let}, [let], n)
+        rez = recu1(strings-{let}, set(let), n)
         a = a|rez
     a = sorted(a, key=lambda x: (-len(x), x))
     return a
