@@ -1,6 +1,6 @@
 
 
-import immagini
+import immagini as images
 def es49(fimm1,fimm2,fimm3):
     '''
     Si definisca la  funzione es49(fimm1,fimm2,fimm3) che, 
@@ -18,25 +18,24 @@ def es49(fimm1,fimm2,fimm3):
       - restituisce il valore calcolato
     Per caricare e salvare i file PNG si possono usare load e save della libreria immagini.
     '''
-    # inserisci qui il tuo codice
-    img1 = immagini.load(fimm1)
-    img2 = immagini.load(fimm2)
-    w1, h1 = len(img1[0]), len(img1)
-    w2, h2 = len(img2[0]), len(img2)
-    # calcolo le dimensioni della nuova immagine
-    w3 = min(w1,w2)
-    h3 = min(h1,h2)
-    # creo la nuova immagine
-    img3 = [[(0, 0, 0) for _ in range(w3)] for _ in range(h3)]
-    count = 0
-    # lavoro sulla nuova immagine
-    for r in range(h3):
-      for c in range(w3):
-        img3[r][c] = img2[r][c]
-        if r % 2 == c % 2:
-          img3[r][c] = img1[r][c]
-        a, b, c = img3[r][c]
-        if (a+b+c) % 2 == 1:
-          count+=1
-    immagini.save(img3, fimm3)
-    return count
+    
+    im1 = images.load(fimm1)
+    im2 = images.load(fimm2)
+    
+    img = [ [(0,)*3]*min(len(im1[0], im2[0])) for _ in range(min(len(im1), len(im2))) ]
+    
+    i=0
+    for row in range(len(img)):
+        for col in range(len(img[0])):
+            if (col%2==0 and row%2==0) or (col%2==1 and row%2==1):
+                img[row][col] = im1[row][col]
+            else:
+                img[row][col] = im2[row][col]
+            
+            if (row+col)%2:
+                i += 1
+    
+    images.save(img, fimm3)
+    
+    return i
+    

@@ -1,4 +1,4 @@
-import immagini
+import immagini as images
 import json
 
 
@@ -23,4 +23,26 @@ def es22(filePng, fileJson):
         :return: la stringa lessicograficamente piu' piccola tra quelle che compaiono 
         nella matrice con piu' frequenza.
     '''
-    pass
+    img = images.load(filePng)
+    
+    M = []
+    for row in range(len(img)):
+        p = []
+        for col in range(len(img[0])):
+            color = str(img[row][col][0]).zfill(3)+str(img[row][col][1]).zfill(3)+str(img[row][col][2]).zfill(3)
+            p.append(color)
+        M.append(p)
+    
+    m = [ y for x in M for y in x ]
+    i = -1
+    c = set(m)
+    for x in c:
+        if i < m.count(x):
+            i = m.count(x)
+    
+    with open(fileJson, 'wt') as fw:
+        json.dump(M, fw)
+    
+    return sorted([ x for x in m if m.count(x) == i ])[0]
+    
+# print(es22("3cime.png", "pippo.json"))

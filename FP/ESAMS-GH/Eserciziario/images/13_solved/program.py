@@ -1,4 +1,4 @@
-import immagini
+import immagini as images
 
 '''    
     Es 12: 4 punti
@@ -28,27 +28,26 @@ import immagini
     Per caricare e salvare i file PNG si possono usare load e save della libreria immagini.
     '''
 def es13(fimm,fimm1):
-    img = immagini.load(fimm)
-    colori = set()
-    # prendo i colori di ogni pixel dal immagine
-    for r in range(len(img)):
-      for c in range(len(img[0])):
-        colori.add(img[r][c])
-    # ordino le tuple di colori in ordine crescente
-    lista = list(colori)
-    lista_ordinata = sorted(lista)
-    # calcolo la lunghezza della lista ordinata e creo la lista risultato
-    lunghezza = len(lista_ordinata)
-    risultato = []
-    # suddivido in gruppi di 50
-    for x in range(0,lunghezza,50):
-      risultato.append(lista_ordinata[x:x+50])
-    # vado a modificare l'immagine con i colori selezionali
-    for r in range(len(img)):
-      for c in range(len(img[0])):
-        for el in risultato:
-          if img[r][c] in el:
-            img[r][c]=el[0]
-    immagini.save(img,fimm1)
-    # ritorno il numero di colori differenti
-    return len(risultato)
+    img = images.load(fimm)
+    colors = sorted(set(img[row][col] for row in range(len(img)) for col in range(len(img[0]))))
+    
+    lcolors, p = [], []
+    for x in colors:
+        p.append(x)
+        if len(p)%50 == 0:
+            lcolors.append(p)
+            p = []
+    if p != []:
+        lcolors.append(p)
+    
+    for row in range(len(img)):
+        for col in range(len(img[0])):
+            ori = img[row][col]
+            color = [ x[0] for x in lcolors if ori in x ]
+            img[row][col] = color[0]
+    images.save(img, fimm1)
+    
+    return len(lcolors)
+                
+    
+# print(es13('Foto3.png', 'pippo.png'))

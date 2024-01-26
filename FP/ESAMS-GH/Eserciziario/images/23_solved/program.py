@@ -1,4 +1,4 @@
-import immagini
+import immagini as images
 import json
 
 
@@ -19,4 +19,28 @@ def es23(fileJson, filePng):
         viene selezionato il colore che precede nell'ordinamento crescente 
         rispetto alla prima, alla seconda e poi alla terza coordinata).
     '''
-    pass
+    with open(fileJson, mode='rt') as fr:
+        M = json.load(fr)
+    
+    colors = {}
+    for row in range(len(M)):
+        for col in range(len(M[0])):
+            color = (int(M[row][col][0:3]), int(M[row][col][3:6]), int(M[row][col][6:]))
+            colors[color] = colors.get(color, 0) + 1
+            M[row][col] = color
+    
+    images.save(M, filePng)
+
+
+    # return sorted(M, key=lambda x: (-M.count(x), x[0], x[1], x[2]))[0]
+    if list(colors.values()).count(max(list(colors.values()))) > 1:
+        c = []
+        for k, v in colors.items():
+            if v == max(list(colors.values())):
+                c.append(k)
+        return sorted(c, key=lambda x: (x[0], x[1], x[2]))[0]
+
+    return list(colors.keys())[list(colors.values()).index(max(list(colors.values())))]
+    
+    
+# print(es23('italia.json', 'pippo.png'))

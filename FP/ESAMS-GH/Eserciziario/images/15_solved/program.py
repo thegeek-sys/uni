@@ -1,6 +1,6 @@
 
 
-import immagini
+import immagini as images
 def es15(fimm1,fimm2,fimm3):
     '''    
     Es 3: 6 punti
@@ -20,5 +20,28 @@ def es15(fimm1,fimm2,fimm3):
       - restituisce il valore calcolato
     Per caricare e salvare i file PNG si possono usare load e save della libreria immagini.
     '''
-    pass
+    im1, im2 = images.load(fimm1), images.load(fimm2)
     
+    img = [ [ (0,)*3 ]*max(len(im1[0]), len(im2[0])) for _ in range(max(len(im1), len(im2))) ]
+    
+    x1, x2, y1, y2 = len(im1[0]), len(im2[0]), len(im1), len(im2)
+    
+    i = 0
+    for row in range(len(img)):
+        for col in range(len(img[0])):
+            if (row < y1 and row < y2 and col < x1 and col < x2) or (row > y1 and row > y2 and col > x1 and col > x2):
+                img[row][col] = (0,0,0)
+            elif row < y1 and col < x1:
+                img[row][col] = im1[row][col]
+            elif row < y2 and col < x2:
+                img[row][col] = im2[row][col]
+            if img[row][col] == (0,0,0):
+                i+=1
+    images.save(img, fimm3)
+    
+    return i
+
+print(es15('foto1.png','foto2.png','pippo.png'))
+
+
+

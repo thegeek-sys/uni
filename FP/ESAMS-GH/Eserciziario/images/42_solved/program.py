@@ -1,5 +1,5 @@
 
-import immagini
+import immagini as images
 
 def es42(fImageIn, fcolori, fImageOut):
     '''
@@ -25,7 +25,19 @@ def es42(fImageIn, fcolori, fImageOut):
     :param fImageOut: nome del file PNG in cui salvare l'immagine modificata
     :return: numero di pixel modificati
     '''
-    # Mettete il vostro codice qui
-
-
-
+    
+    img = images.load(fImageIn)
+    with open(fcolori, mode='rt') as fr:
+        colors = {}
+        for line in fr:
+            colors[tuple(int(x) for x in line.split()[0:3])] = tuple(int(x) for x in line.split()[3:])
+    
+    i = 0
+    for row in range(len(img)):
+        for col in range(len(img[0])):
+            if img[row][col] in colors:
+                img[row][col] = colors[img[row][col]]
+                i+=1
+                
+    images.save(img, fImageOut)
+    return i
