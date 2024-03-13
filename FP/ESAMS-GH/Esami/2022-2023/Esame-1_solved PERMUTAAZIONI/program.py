@@ -359,41 +359,28 @@ NOTA: consigliamo fortemente di dividere l'esercizio in sottoproblemi
 dividendo in funzioni per ogni sottoproblema.
 """
 
-def aux_2(n, nums, ops, l, x):
+def aux_2(n, nums, ops, l=1):
     rez = set()
-
-    if l == x:
+    if len(nums) == l:
         return n
-    
     else:
-        for el in n:
+        for i in n:
             for op in ops:
-                for num in nums:
-                    check = ''.join([x if x.isdigit() else " " for x in el]).split()
-                    check = [ int(x) for x in check ]
-                    if int(num) not in check:
-                        if l == x-1:
-                            stringa = el + num
-                        else:
-                            stringa = el + num + op
-                        rez.add(stringa)
-        rez = aux_2(rez, nums, ops, l+1, x)
-    
+                for j in nums:
+                    a = ''.join([x if x.isdigit() else ' ' for x in str(i)])
+                    a = [int(x) for x in a.split()]
+                    if j not in a:
+                        check = op.join([str(i),str(j)])
+                        # check = [str(i),str(j)]
+                        rez.add(check)
+        rez = aux_2(rez, nums, ops, l+1)
     return rez
 
-
 def ex2(nums, ops):
-    res = set()
-    
-    x = len(nums)
-    nums = set([str(x) for x in nums])
-
-    for n in nums:
-        p = aux_2({''}, nums, ops, 0, x)
-        res = res | p
-    
-    print(res)
-    return res
+    rez = set()
+    for num in nums:
+        p = aux_2({num}, nums, ops)
+        rez = rez | p
 
 nums = {99, 88, 100}; ops=['+', '*', '-']
 

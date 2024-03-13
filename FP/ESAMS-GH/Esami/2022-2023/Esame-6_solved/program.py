@@ -55,7 +55,7 @@ def func1(int_list, bottom, up):
     for x in int_list[::-1]:
         if not (bottom <= x <= up):
             int_list.remove(x)
-            i+=1
+            i += 1
     return i
 
 # l1 = [4, 5, 10, 3, -1, 2]
@@ -77,9 +77,10 @@ Esempio:
 '''
 def func2(dict1, dict2):
     rez = {}
-    for k, v in dict1.items():
+    for k in dict1:
         if k in dict2:
-            rez[k] = min(v, dict2[k]).lower()
+            v = min(dict1[k], dict2[k])
+            rez[k] = v.lower()
     return rez
 
 # print(func2({'a':'GoOd', 'b':'bAd', 'c':'EXCELLENT'}, {'a':'Bad', 'c':'greaT'}))
@@ -96,13 +97,12 @@ Esempio:
 '''
 
 def func3(str1, str2):
-    M, m = max(str1, str2, key=len), min(str1, str2, key=len)
+    m, M = min(str1, str2, key=len), max(str1, str2, key=len)
     rez = ''
     for i in range(len(m)):
-        if m[i].lower() == M[i].lower():
+        if M[i].lower() == m[i].lower():
             rez += m[i]
     return rez
-
 
 # print(func3('abracadabra', 'ABerrant'))
 # print(func3('delIberAtIVelY', 'ReproductIvE'))

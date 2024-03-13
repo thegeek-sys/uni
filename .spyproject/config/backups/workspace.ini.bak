@@ -4,7 +4,7 @@ save_data_on_exit = True
 save_history = True
 save_non_project_files = False
 project_type = 'empty-project-type'
-recent_files = ['FP/ESAMS-GH/Eserciziario/images/42/program.py', 'FP/ESAMS-GH/Eserciziario/images/42/test.py', 'FP/ESAMS-GH/Eserciziario/images/42/fcolori1.txt']
+recent_files = ['FP/permuazioni copia.py', 'FP/permuazioni.py']
 
 [main]
 version = 0.2.0

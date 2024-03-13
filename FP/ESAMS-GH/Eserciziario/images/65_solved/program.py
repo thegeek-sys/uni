@@ -30,7 +30,7 @@ def find(img, x, xi, y, yi, color):
             if img[row][col] != (0,)*3:
                 scolors.add(img[row][col])
     
-    return sorted(scolors, key=lambda x: (x[0], x[1], x[2]), reverse=True)[0]
+    return sorted(scolors, reverse=True)[0]
     
 
 def es65(k,lista1,fout):

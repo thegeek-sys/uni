@@ -63,9 +63,12 @@ semplici.
 
 
 def ex1(triangles):
-    # INSERISCI QUI I TUO CODICE
-    pass
+    l = len(triangles)
 
+    triangles[:] = [ triangle for triangle in triangles if round(sorted(triangle)[0]**2+sorted(triangle)[1]**2, 3) == round(sorted(triangle)[2]**2,3) ]
+    return l-len(triangles)
+
+print(ex1([(3, 4, 5), (12, 36.05551, 34), (1,1,3), (8,8,8), (2, 3, 4)]))
 
 # %% ----------------------------------- EX.2 ----------------------------------- #
 """
