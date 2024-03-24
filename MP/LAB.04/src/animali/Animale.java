@@ -6,7 +6,7 @@ public abstract class Animale {
     protected Taglia taglia;
 
     public Animale(int numZampe, String verso, Taglia taglia) {
-        super();
+        //super(); // chiama implicitamente il supercostruttore Object
         this.verso = verso;
         this.numZampe = numZampe;
         this.taglia = taglia;
