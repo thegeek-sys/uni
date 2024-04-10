@@ -5,7 +5,10 @@ public class CasellaSpostaGiocatore extends Casella{
     @Override
     public void azione(Giocatore g) {
         Random r = new Random();
-        int randSpo = r.nextInt(-7, 8);
-        g.setPos(g.getPos()+randSpo);
+        int randSpo;
+        do {
+            randSpo = r.nextInt(-7, 8);
+        } while (g.getPos()+randSpo>=Tabellone.N);
+        g.setPos(g.getPos()-randSpo);
     }
 }

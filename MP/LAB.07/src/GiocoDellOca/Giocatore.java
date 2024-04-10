@@ -8,6 +8,8 @@ public class Giocatore {
 
     public Giocatore(String nome) {
         this.nome = nome;
+        pos = 0;
+        punti = 0;
     }
 
     public int tiraDadi() {
