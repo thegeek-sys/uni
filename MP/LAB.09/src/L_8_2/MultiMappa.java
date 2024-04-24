@@ -10,5 +10,4 @@ public class MultiMappa {
         return map.getOrDefault(k, new ArrayList<String>());
     }
 
-    public void put(int k, ArrayList)
 }
