@@ -39,9 +39,9 @@ public class BarraStrumenti extends JPanel implements ActionListener {
         JButton premuto = (JButton)e.getSource();
 
         if (premuto == bottoneBuongiorno) {
-            textAreaPanel.appendiTesto("Buongiorno stronzo !!!");
+            textAreaPanel.appendiTesto("Buongiorno !!!");
         } else if (premuto == bottoneBuonasera) {
-            textAreaPanel.appendiTesto("Buonasera stronzo !!!");
+            textAreaPanel.appendiTesto("Buonasera !!!");
         }
     }
 }

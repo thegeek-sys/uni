@@ -27,7 +27,6 @@ public class Frame extends JFrame {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // textArea.append("DIOCANEE\n");
                 textAreaPanel.appendiTesto("Ciao"+"\n");
             }
         });
