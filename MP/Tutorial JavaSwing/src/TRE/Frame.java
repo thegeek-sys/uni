@@ -7,9 +7,7 @@ import java.awt.event.ActionListener;
 
 public class Frame extends JFrame {
 
-    private TextAreaPanel textAreaPanel;
-    private JButton button;
-    private BarraStrumenti barraStrumenti;
+    private TextAreaPanel textAreaPanel;private BarraStrumenti barraStrumenti;
     private PannelloForm pannelloForm;
 
     public Frame() {
@@ -19,21 +17,31 @@ public class Frame extends JFrame {
 
         barraStrumenti = new BarraStrumenti();
         textAreaPanel = new TextAreaPanel();
-        button = new JButton("Cliccami ti prego");
         pannelloForm = new PannelloForm();
 
         barraStrumenti.setTextAreaPanel(textAreaPanel);
 
-        button.addActionListener(new ActionListener() {
+        pannelloForm.setFormListener(new FormListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                textAreaPanel.appendiTesto("Ciao"+"\n");
+            public void formEventListener(FormEvent fe) {
+                String marca = fe.getMarca();
+                String modello = fe.getModello();
+                boolean vendita = fe.isVendita();
+                String targa = fe.getTarga();
+                String cambio = fe.getCambio();
+
+                textAreaPanel.appendiTesto("Marca: "+marca);
+                textAreaPanel.appendiTesto("Modello: "+modello);
+                textAreaPanel.appendiTesto("Venduta: "+vendita);
+                textAreaPanel.appendiTesto("Targa: "+targa);
+                textAreaPanel.appendiTesto("Cambio: "+cambio);
+                textAreaPanel.appendiTesto("");
+
             }
         });
 
         add(barraStrumenti, BorderLayout.PAGE_START);
         add(textAreaPanel, BorderLayout.CENTER);
-        add(button, BorderLayout.PAGE_END);
         add(pannelloForm, BorderLayout.LINE_START);
 
         setSize(800,500);
