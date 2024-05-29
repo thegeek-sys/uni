@@ -1,31 +1,26 @@
-package TRE;
+package QUATTRO.concessionaria.model;
 
-import java.util.EventObject;
+import java.io.Serializable;
 
-public class FormEvent extends EventObject {
-    /**
-     * Constructs a prototypical Event.
-     *
-     * @param source the object on which the Event initially occurred
-     * @throws IllegalArgumentException if source is null
-     */
+public class Auto implements Serializable {
+    private static int contatore = 0;
+    private int id;
+
     private String marca;
     private String modello;
     private boolean vendita;
     private String targa;
-    private String cambio;
-    private int bagagliaio;
+    private Cambio cambio;
+    private Bagagliaio bagagliaio;
     private String alimentazione;
     private int immatricolazione;
     private int cilindrata;
     private String colore;
 
-    public FormEvent(Object source) {
-        super(source);
-    }
-
-    public FormEvent(Object source, String marca, String modello, boolean vendita, String targa, String cambio, int bagagliaio, String alimentazione, int immatricolazione, int cilindrata, String colore) {
-        super(source);
+    public Auto(String marca, String modello, boolean vendita,
+                String targa, Cambio cambio, Bagagliaio bagagliaio,
+                String alimentazione, int immatricolazione, int cilindrata, String colore) {
+        id = contatore++;
         this.marca = marca;
         this.modello = modello;
         this.vendita = vendita;
@@ -36,6 +31,14 @@ public class FormEvent extends EventObject {
         this.immatricolazione = immatricolazione;
         this.cilindrata = cilindrata;
         this.colore = colore;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getMarca() {
@@ -70,19 +73,19 @@ public class FormEvent extends EventObject {
         this.targa = targa;
     }
 
-    public String getCambio() {
+    public Cambio getCambio() {
         return cambio;
     }
 
-    public void setCambio(String cambio) {
+    public void setCambio(Cambio cambio) {
         this.cambio = cambio;
     }
 
-    public int getBagagliaio() {
+    public Bagagliaio getBagagliaio() {
         return bagagliaio;
     }
 
-    public void setBagagliaio(int bagagliaio) {
+    public void setBagagliaio(Bagagliaio bagagliaio) {
         this.bagagliaio = bagagliaio;
     }
 

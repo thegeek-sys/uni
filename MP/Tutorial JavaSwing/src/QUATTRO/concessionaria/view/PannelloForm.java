@@ -1,4 +1,4 @@
-package TRE;
+package QUATTRO.concessionaria.view;
 
 import javax.swing.*;
 import javax.swing.border.Border;
