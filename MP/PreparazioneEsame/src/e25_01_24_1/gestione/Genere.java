@@ -1,0 +1,5 @@
+package e25_01_24_1.gestione;
+
+public enum Genere {
+    PLATFORM, SHOOTER, FIGHTING, BEAT_EM_UP, STEALTH, SURVIVAL, RHYTHM, BATTLE_ROYALE;
+}

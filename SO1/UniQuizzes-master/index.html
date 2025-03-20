@@ -1,0 +1,207 @@
+<!DOCTYPE html PUBLIC"-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en">
+
+<head>
+    <title>JSQuizee - JS Simple Quiz Engine</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!-- Bootstrap JavaScript (bootstrap.js) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+
+    <!-- Bootstrap icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body class="container">
+    <script src="js/main.js"></script>
+    <script src="js/config.js"></script>
+
+    <h1 class="display-3">
+        <script>document.write(title)</script>
+    </h1>
+
+    <div style="display: inline-block; vertical-align: top; margin-right: 5px;">
+        <div style="display: inline-block; overflow: hidden; border: 0.5px solid gray; border-radius: 50%;">
+            <img src='https://avatars.githubusercontent.com/u/44711271' alt="User Avatar" width="36px" style="width: 36px; height: auto; object-fit: cover;">
+        </div>
+    </div>
+    
+    <div style="display: inline-block; vertical-align: top;">
+        <a class="btn btn-secondary" href="javascript:document.location.href=getCustomLink();">
+            <script>document.write(customDescription)</script>
+            <span id="starsCount" class="ms-2"></span>
+        </a>
+    
+        <a class="btn btn-success" href="https://paypal.me/therealdag7">Support the author on Paypal</a>
+    </div>
+    
+    <div class="alert alert-info info-dismissible fade show" role="alert" style="margin-top: 10px; margin-bottom: 10px;">
+        <!-- icon of info -->
+        <i class="bi bi-info-circle-fill"></i>
+        <script>document.write(infoText)</script>
+    </div>
+
+    <div class="alert alert-warning alert-dismissible fade show" role="alert" style="margin-top: 10px; margin-bottom: 10px;">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+        <script>document.write(disclaimerText)</script>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <h3>Rules</h3>
+    <p id="h3Explaination"></p>
+
+    <h3>Settings</h3>
+    <div class="form-group">
+        <label for="quiz-version">Choose a quiz:</label>
+        <select class="form-control" name="quiz-version" id="quiz-version">
+            <script>
+                if (typeof jsonFiles !== 'undefined' && jsonFiles.constructor == Object) {
+                    let i = 0;
+                    // create select elements
+                    for (var key in jsonFiles) {
+                        var value = jsonFiles[key];
+
+                        i == 0 ? createSelectBox("quiz-version", value, key, true) : createSelectBox("quiz-version", value, key)
+                        i++
+                    }
+                }
+            </script>
+        </select>
+    </div>
+
+    <button class="btn btn-primary" name="btn-quiz-reload" id="btn-quiz-reload">Reload these questions</button>
+
+    <h3>Graphics</h3>
+
+    <!-- Toggle switch -->
+    <div class="form-check form-switch">
+        <input type="checkbox" class="form-check-input" id="chk-toggle-bootstrap" onchange="toggleBootstrap()" checked>
+        <label class="form-check-label" for="chk-toggle-bootstrap">Switch to Modern Interface</label>
+    </div>
+
+    <h3>Options</h3>
+    <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="chk-shuffle-questions" name="chk-shuffle-questions"
+            title="Shuffle Questions" checked />
+        <label class="form-check-label" for="chk-shuffle-questions">Shuffle Questions</label>
+    </div>
+
+    <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="chk-shuffle-answers" name="chk-shuffle-answers"
+            title="Shuffle Answers" checked />
+        <label class="form-check-label" for="chk-shuffle-answers">Shuffle Answers</label>
+    </div>
+
+    <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="chk-timer" name="chk-timer" title="Enable / Disable Time"
+            checked />
+        <label class="form-check-label" for="chk-timer">Enable / Disable Time</label>
+    </div>
+
+
+    <div class="form-group"  style="margin-top: 10px;">
+        <!-- bootstrap slider -->
+        <label for="sliderQuestionsNumber">Number of questions:  </label> <span id="sliderText"></span>
+        <input type="range" autocomplete="off" min="0" step="5" class="form-range" min="5" max="200" value="40" id="sliderQuestionsNumber" name="sliderQuestionsNumber" onmouseup="changeAnswers()" ontouchend="changeAnswers()">
+    </div>
+
+
+    <div>
+        <p id="timeleft"></p>
+        <h2 id="end"></h2>
+    </div>
+
+    <hr class="my-4">
+    
+    <div id="container"></div>
+
+    <button type="button" id="btn-send" class="btn btn-success" onclick="validate()">Send</button>
+
+    <!-- Bootstrap Modal -->
+    <div class="modal fade" id="resultModal" tabindex="-1" aria-labelledby="resultModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="resultModalLabel">Quiz Results</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="resultModalBody">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p id="results" hidden=""></p>
+</body>
+<script>
+    function toggleBootstrap() {
+        var isChecked = document.getElementById("chk-toggle-bootstrap").checked;
+
+        if (isChecked) {
+            // Reload the page with no cache
+            location.reload(true);
+        } else {
+            // Reset styles of every element
+            var allElements = document.querySelectorAll('*');
+            // Hide resultModal
+            var resultModal = document.getElementById("resultModal");
+            resultModal.hidden = true;
+            [].forEach.call(allElements, function (element) {
+                // if element is a div add rounded border
+                element.removeAttribute("class");
+                if (element.tagName == "DIV") {
+                    element.setAttribute("class", "rounded border");
+                }
+
+                if (element.tagName == "IMG") {
+                    // max-width: 50px;
+                    element.setAttribute("style", "max-width: 400px;");
+                }
+            });
+        }
+    }
+
+    if (init() == 0) {
+        outslider.innerHTML = slider.value;
+            // checkbox at the original values after a refresh
+            var allCheckboxes = document.querySelectorAll('input[type=checkbox]');
+            [].forEach.call(allCheckboxes, function (checkbox) {
+                checkbox.checked = checkbox.defaultChecked;
+            });
+        } else {
+            document.getElementById("btn-send").hidden = true
+        }
+
+        async function fetchStarsCount() {
+            try {
+                const response = await fetch('https://api.github.com/repos/dag7dev/UniQuizzes');
+                const data = await response.json();
+                return data.stargazers_count;
+            } catch (error) {
+                console.error('Error fetching stars count:', error);
+                return null;
+            }
+        }
+
+        // Update the stars count on the banner
+        async function updateStarsCount() {
+            const starsCount = await fetchStarsCount();
+            if (starsCount !== null) {
+                const starsCountElement = document.getElementById('starsCount');
+                starsCountElement.textContent = `⭐ ${starsCount}`;
+            }
+        }
+        // Call updateStarsCount when the page loads
+        updateStarsCount();
+
+        // Execute updateStarsCount every 30 seconds
+        setInterval(updateStarsCount, 30000); // 30000 milliseconds = 30 seconds
+    </script>
+</body>
+
+</html>
