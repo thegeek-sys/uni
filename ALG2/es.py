@@ -252,15 +252,15 @@ def DFSr_es9(G, x, visitati):
         if visitati[y] == -1:
             DFSr_es9(G, y, visitati)
 
-def cicli_es9(x, G, cicli):
-    cicli[x] = 1
-    for v in G[x]:
+def cicli_es9(u, padre, G, cicli):
+    cicli[u] = 1
+    for v in G[u]:
         if cicli[v] == 1:
-            return True
-        if cicli[v] == 0:
-            if cicli_es9(v, G, cicli):
+            if v != padre:
                 return True
-    cicli[x] = 2
+        else:
+            if cicli_es9(v, u, G, cicli):
+                return True
     return False
 
 def es9(G):
@@ -272,31 +272,12 @@ def es9(G):
             c+=1
             DFSr_es9(G, x, visitati)
             
-            if cicli_es9(x, G, cicli):
+            if cicli_es9(x, x, G, cicli):
                 c-=1
     return c
 
-G = [
-    [1,2],
-    [0,2],
-    [0,1],
-    [4,6,10],
-    [3],
-    [],
-    [3],
-    [8],
-    [7],
-    [10],
-    [3,9],
-    [12,13],
-    [11,14,15],
-    [11,14],
-    [12,13],
-    [12]
-]
-#print(es9(G))
-visitati = [0]*len(G)
-#print(cicli_es9(8,G,visitati))
+G = [[1,2],[0,2],[0,1],[4,6,10],[3],[],[3],[8],[7],[10],[3,9],[12,13],[11,14,15],[11,14],[12,13],[12]]
+print(es9(G))
 
 '''
 esercizio appello straordinario
@@ -327,3 +308,4 @@ def es10(G):
 
 G = [[1,4],[0,4],[5,7],[6],[0,1],[2,7],[3],[2,5]]
 #print(es10(G))
+
