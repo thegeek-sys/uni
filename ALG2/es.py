@@ -277,7 +277,7 @@ def es9(G):
     return c
 
 G = [[1,2],[0,2],[0,1],[4,6,10],[3],[],[3],[8],[7],[10],[3,9],[12,13],[11,14,15],[11,14],[12,13],[12]]
-print(es9(G))
+#print(es9(G))
 
 '''
 esercizio appello straordinario
@@ -308,4 +308,243 @@ def es10(G):
 
 G = [[1,4],[0,4],[5,7],[6],[0,1],[2,7],[3],[2,5]]
 #print(es10(G))
+
+'''
+Sia G un grafo completo con m archi. Descrivere un algoritmo che dato
+G rappresentato tramite liste di adiacenza iun O(m) ne orienta gli archi
+producento un grafo diretto aciclico
+'''
+def es11(G):
+    res = []
+    for i in range(len(G)):
+        t = []
+        for y in G[i]:
+            if i<y:
+                t.append(y)
+        res.append(t)
+    return res
+
+G = [
+    [1,2,3],
+    [0,2,3],
+    [0,1,3],
+    [0,1,2]
+]
+#print(es11(G))
+
+'''
+Dato un grafo G, progettare un algoritmo che trovi i
+punti di articolazione 
+'''
+def DFSr_es12(x, padre, altezza, ponti, figli):
+    if padre == -1:
+        altezza[x] = 0
+    else:
+        altezza[x] = altezza[padre]+1
+    minR = altezza[x]
+    for y in G[x]:
+        if altezza[y] == -1:
+            figli[x]+=1
+            b = DFSr_es12(y, x, altezza, ponti, figli)
+            if b > altezza[x]:
+                ponti.append(x)
+                ponti.append(y)
+            minR = min(minR, b)
+        elif y != padre:
+            minR = min(minR, altezza[y])
+    return minR
+
+def es12(G):
+    figli = [0]*len(G)
+    ponti = []
+    altezza = [-1]*len(G)
+
+    DFSr_es12(0, -1, altezza, ponti, figli)
+
+    if figli[0] > 1:
+        art = [0]
+    else:
+        art = []
+
+    for x in ponti:
+        if figli[x] >= 1 and x != 0:
+            art.append(x)
+    return art
+
+'''
+Dato un grafo G e due sottoinsiemi V1 e V2 dei suoi vertici
+si definisce distanza tra V1 e V2 la distanza minima per
+andare da un nodo in V1 ad un nodo in V2. Nel caso V1 e V2
+non sono disgiunti allora il valore 0.
+Descrivere un algoritmo che, dato un grafo G e i due sottoinsiemi
+dei vertici V1 e V2 calcola la loro distanza. L'algoritmo deve
+avere complessità O(n+m)
+'''
+def es13(G, V1, V2):
+    if V1&V2:
+        return 0
+    
+    D = [-1]*len(G)
+    for x in V1:
+        D[x] = 0
+
+    coda = list(V1)
+    i = 0
+    while len(coda) > i:
+        u = coda[i]
+        i+=1
+        for y in G[u]:
+            if D[y] == -1:
+                D[y] = D[u]+1
+                coda.append(y)
+
+    d = float('inf')
+    for x in V2:
+        if D[x] != -1:
+            d = min(D[x], d)
+    return d
+
+G = [[1,11,12],[0,2,10,11],[1,3,9,13],[2,4],[3,5,8,13],[4,6,7],[5,13],[5,8],[4,7,9,14],[2,8,10],[1,8,9,14],[0,1,12],[0,11],[2,4,6],[8,10]]
+V1 = {5, 11, 13}
+V2 = {9, 14}
+#print(es13(G, V1, V2))
+
+'''
+Una foglia di un albero è un vertice con un solo vicino. Dare
+lo pseudocodice per un algoritmo che prende in input un albero
+di n vertici in formato vettore dei padri e restituisce un
+elenco di tutte le foglie con complessità O(n)
+'''
+def es14(P):
+    F = [0]*len(P)
+
+    for x in P:
+        F[x] += 1
+
+    r = []
+    for i in range(len(F)):
+        if F[i] == 0:
+            r.append(i)
+
+    return r
+
+P = [7,0,7,2,5,2,7,7]
+#print(es14(P))
+
+'''
+Dato un grafo G, restituire l'insieme X dei nodi che non formano cicli
+'''
+def cicli_es15(u, G, visitati):
+    visitati[u] = 1
+    for v in G[u]:
+        if visitati[v] == 1:
+            return True
+        if visitati[v] == 0:
+            if cicli_es15(v, G, visitati):
+                return True
+    visitati[u] = 2
+    return False
+        
+
+def es15(G):
+    visitati = [0]*len(G)
+    X = []
+    for u in range(len(G)):
+        if visitati[u] == 0:
+            cicli_es15(u, G, visitati)
+
+    for i in range(len(visitati)):
+        if visitati[i] == 2:
+            X.append(i)
+    print(visitati)
+    return X
+
+G = [
+    [1,6],
+    [],
+    [0],
+    [1],
+    [2],
+    [2],
+    [5,7],
+    [0,3]
+]
+#print(es15(G))
+
+'''
+Si consideri un labirinto rappresentato da una matrice quadrata binaria M di 
+dimensioni n x n, in cui:
+- M[i][j] = 0 indica una cella attraversabile
+- M[i][j] = 1 indica un muro, quindi non attraversabile
+Una porta è una cella M[i][j] = 0 che si trova sul bortdo della matrice. Una
+cella attraversabile è detta raggiungibile se esiste un cammino formato solo da 
+celle con valore 0 che le collega a una porta. Tra una cella e l'altra nei cammini
+ci si può spostare solo orizzontalmente e verticalmente.
+Progettare un algoritmo che, data la matrice M, in tempo O(n^2) determini il 
+numero totale di celle raggiungibili nel labirinto
+'''
+def es16(G):
+    tot = 0
+    
+    # prima e ultima riga
+    for j in range(len(G[0])):
+        # prima riga
+        if G[0][j] == 0:
+            G[0][j] = -1
+            tot+=1
+
+        # ultima riga
+        if G[len(G)-1][j] == 0:
+            G[len(G)-1][j] = -1
+            tot+=1
+    
+    # prima e ultima colonna
+    for i in range(len(G)):
+        # prima colonna
+        if G[i][0] == 0:
+            G[i][0] = -1
+            tot+=1
+
+        # ultima colonna
+        if G[i][len(G[0])-1] == 0:
+            G[i][len(G[0])-1] = -1
+            tot+=1
+
+    # aggingo quelli dentro la matrice
+    for i in range(1,len(G)-1):
+        for j in range(1,len(G[0])-1):
+            if G[i][j-1] == -1 or G[i-1][j] == -1:
+                if G[i][j] == 0:
+                    G[i][j] = -1
+                    tot+=1
+
+    # aggiungo i restanti
+    for i in range(len(G)-2,0,-1):
+        for j in range(len(G[0])-2,0,-1):
+            if G[i][j+1] == -1 or G[i+1][j] == -1:
+                if G[i][j] == 0:
+                    G[i][j] = -1
+                    tot+=1
+
+    for i in range(1,len(G)-1):
+        for j in range(1,len(G[0])-1):
+            if G[i][j-1] == -1 or G[i-1][j] == -1:
+                if G[i][j] == 0:
+                    G[i][j] = -1
+                    tot+=1
+
+    return tot
+
+G = [
+    [1,1,0,1,1,0,1],
+    [1,0,0,0,0,0,1],
+    [1,1,0,1,1,1,1],
+    [1,1,1,0,1,0,1],
+    [0,0,1,0,1,0,1],
+    [1,0,1,1,1,0,1],
+    [1,0,1,0,1,1,1]
+]
+
+#print(es16(G))
+
 
