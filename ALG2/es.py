@@ -535,6 +535,39 @@ def es16(G):
 
     return tot
 
+def DFSr_es16_alt(x, G, visitati):
+    visitati[x] = 0
+    for u in G[x]:
+        if visitati[u] == -1:
+            DFSr_es16(u, G, visitati)
+
+def es16_alt(G):
+    # trasformo il grafo in liste di adiancenza
+    T = [[] for _ in range(len(G)*len(G))]
+    entrance = []
+    nodes = -1
+    for i in range(len(G)):
+        for j in range(len(G[0])):
+            nodes += 1
+            if G[i][j] == 0:
+                if j<len(G[0]) and G[i][j+1] == 0:
+                    T[nodes].append(nodes+1)
+                    T[nodes+1].append(nodes)
+
+                if i<len(G)-1 and G[i+1][j] == 0:
+                    T[nodes].append(nodes+len(G))
+                    T[nodes+len(G)].append(nodes)
+
+                if i==0 or j==0 or i==len(G)-1 or j==len(G[0])-1:
+                    entrance.append(nodes)
+
+    visitati = [-1]*len(T)
+    for x in entrance:
+        if visitati[x] == -1:
+            DFSr_es16_alt(x, T, visitati)
+
+    return visitati.count(0)
+
 G = [
     [1,1,0,1,1,0,1],
     [1,0,0,0,0,0,1],
@@ -544,7 +577,41 @@ G = [
     [1,0,1,1,1,0,1],
     [1,0,1,0,1,1,1]
 ]
-
 #print(es16(G))
 
+'''
+Sia dato un grafo non orientato e connesso G,
+i cui nodi sono colorati. Un cammino lecito nel grafo è un
+cammino che non attraversa nodi adiacenti dello stesso colore.
+Dati due nodi a e b, l’obiettivo è trovare il numero minimo di
+archi da percorrere per andare da aa a bb seguendo un cammino lecito.
+Il grafo G è rappresentato tramite liste di adiacenza e i colori
+dei nodi sono memorizzati in un vettore C, dove C[i] rappresenta
+il colore del nodo i.
 
+Progettare un algoritmo che, dati G, C, a, e b, risolva il problema
+restituendo il minimo numero di archi da percorrere per spostarsi
+da a a b lungo un cammino lecito. Se non esiste alcun cammino lecito
+che connette a e b, l’algoritmo deve restituire None.
+
+L’algoritmo deve avere una complessità O(m), dove m è il numero di archi nel grafo G.
+'''
+def es17(G, C, a, b):
+    D = [-1]*len(G)
+    D[a] = 0
+    coda = [a]
+    i = 0
+    while len(coda) > i:
+        u = coda[i]
+        i += 1
+        color = C[u]
+        for y in G[u]:
+            if D[y] == -1 and color != C[y]:
+                D[y] = D[u]+1
+                coda.append(y)
+
+    return D[b]
+
+G = [[1,2,3],[0,4,5,6],[0,6],[0,4],[1,3,5],[1,4,6],[1,2,5]]
+C = [0,0,1,1,1,2,0]
+print(es17(G,C,6,1))
