@@ -1,5 +1,23 @@
 from math import sqrt
 
+def sortTop(G):
+    gradoEnt = [0]*len(G)
+    for i in range(len(G)):
+        for v in G[i]:
+            gradoEnt[v]+=1
+    sorgenti = [ i for i in range(len(G)) if gradoEnt[i] == 0 ]
+    ST = []
+    while sorgenti:
+        u = sorgenti.pop()
+        ST.append(u)
+        for v in G[u]:
+            gradoEnt[v]-=1
+            if gradoEnt[v] == 0:
+                sorgenti.append(v)
+    if len(ST) == len(G):
+        return ST
+    return []
+
 '''
 Progettare un algoritmo che prende come parametro un intero n e in tempo O(sqrt(n)) verifica se il numero n `e semiprimo.
 Un numero si dice semiprimo se `e il prodotto di due numeri primi (non necessariamente diversi).
@@ -539,7 +557,7 @@ def DFSr_es16_alt(x, G, visitati):
     visitati[x] = 0
     for u in G[x]:
         if visitati[u] == -1:
-            DFSr_es16(u, G, visitati)
+            DFSr_es16_alt(u, G, visitati)
 
 def es16_alt(G):
     # trasformo il grafo in liste di adiancenza
@@ -614,4 +632,153 @@ def es17(G, C, a, b):
 
 G = [[1,2,3],[0,4,5,6],[0,6],[0,4],[1,3,5],[1,4,6],[1,2,5]]
 C = [0,0,1,1,1,2,0]
-print(es17(G,C,6,1))
+#print(es17(G,C,6,1))
+
+'''
+Devo eseguire n lavori, ognuno dei quali ha un tempo d’esecuzione specifico. Mi
+`e fornito un vettore T di n componenti, dove T [i] rappresenta il tempo richiesto
+per eseguire il lavoro i. Inoltre ho una lista di liste P di n componenti, dove
+P [i] contiene i lavori che devono essere completati prima che io possa iniziare il
+lavoro i.
+Procgettare un algoritmo che, dati T e P , in tempo O(n2), calcoli il tempo
+minimo necessario per completare tutti i lavori tenendo conto che `e possibile
+eseguire pi`u lavori in parallelo. L’algoritmo deve restituire +1 nel caso in
+cui non sia possibile comletare tutti i lavori (ad esempio a causa di cicli di
+dipendenza tra i lavori)
+'''
+def cicli_es18(u, G, visitati):
+    visitati[u] = 0
+    for y in G[u]:
+        if visitati[y] == 1:
+            return True
+        if visitati[y] == 0:
+            if cicli_es18(y, G, visitati):
+                return True
+    visitati[u] = 2
+    return False
+
+def es18(P, T):
+    visitati = [-1]*len(P)
+    for x in visitati:
+        if visitati[x] == -1:
+            if cicli_es18(x,P,visitati):
+                return float('inf')
+
+    S = [[] for _ in range(len(P))]
+    for x in range(len(P)):
+        for y in P[x]:
+            S[y].append(x)
+
+    D = [0]*len(P)
+    ord = sortTop(S)
+    for u in ord:
+        for v in P[u]:
+            D[u] = max(D[u],T[v]+D[v])
+    return max(D[i]+T[i] for i in range(len(P)))
+
+
+    
+T = [3,2,5,4,3,1]
+P = [[1,2],[3],[3],[4],[5],[]]
+#print(es18(P,T))
+
+'''
+Progettare un algoritmo che, dato un DAG pesato G rappresentato mediante
+liste di adiacenza ed un suo vertice sorgente s, restituisca il vettore delle distanze
+dei nodi da s.
+'''
+def es19(G, s):
+    D = [float('inf')]*len(G)
+    D[s] = 0
+    coda = [s]
+    i = 0
+    while len(coda) > i:
+        u = coda[i]
+        i+=1
+        for y in G[u]:
+            if D[y[0]] == float('inf'):
+                coda.append(y[0])
+            D[y[0]] = min(D[y[0]], y[1]+D[u])
+
+    return D
+
+G = [[(2,1),(3,2),(5,4)],[(0,5),(3,1)],[],[(2,-3),(5,6)],[(1,6),(2,-2)],[],[]]
+#print(es19(G,4))
+
+
+'''
+Dare lo pseudo-codice di un algoritmo che preso in input un grafo non diretto e 
+connesso G, un suo nodo u, un vettore dei padri P relativo a una BFS da u in
+G e un arco {v,w} di G, ritorna True se e solo se la rimozione dell'arco {v,w}
+non cambia le distanze da u. L'algoritmo deve avere complessità O(n)
+'''
+def dist_es20(x, u, P):
+    d = 0
+    while x != u:
+        x = P[x]
+        d+=1
+        if d > len(P):
+            return -1
+    return d
+
+def es20(P,G,arco,u):
+    # verifico se l'arco appartiene al grafo dei padri e verifico l'ordine
+    v, w = arco
+    if P[v] == w:
+        # da w a v
+        v, w = w, v
+    # l'arco non appartiene al grafo
+    elif P[w] != v:
+        return False
+    
+    d = dist_es20(w, u, P)
+
+    # questa modifica dell'albero non necessariamente deve essere corretta
+    # mi serve solamente per verificare se il nodo w cambia livello
+    for y in G[w]:
+        if y != v:
+            P[w]=y
+            break
+
+    #print(P)
+
+    # calcolo la distanza di w da u 
+    c = dist_es20(w, u, P)
+    return c == d
+
+G = [
+    [1,3,4],
+    [0,2,3],
+    [1,3],
+    [0,1,2,4],
+    [0,3]
+]
+P = [1,2,2,2,3]
+#print(es20(P,G,(2,1),2))
+
+'''
+Dare un algoritmo che, dato un grafo non diretto G, conta il numero delle componenti connesse di G che sono anche alberi. L'algoritmo deve avere complessità O(n+m)
+'''
+def albero_es21(G, x, visitati, u):
+    if x!=u:
+        visitati[x] = (0,0)
+    visitati[u] = (visitati[u][0]+1, visitati[u][1])
+    for y in G[x]:
+        visitati[u] = (visitati[u][0], visitati[u][1]+1)
+        if visitati[y] == (-1,-1):
+            albero_es21(G, y, visitati, u)
+
+def es21(G):
+    visitati = [(-1,-1)]*len(G)
+    alb=0
+    for x in range(len(G)):
+        if visitati[x] == (-1,-1):
+            visitati[x] = (0,0)
+            albero_es21(G, x, visitati, x)
+            n, a = visitati[x][0], visitati[x][1]
+            if a == 2*(n-1):
+                alb+=1
+    return alb
+
+G = [[1,2],[0,2],[0,1],[4,6,10],[3],[],[3],[8],[7],[10],[3,9],[12,13],[11,14,15],[11,14],[12,13],[12]]
+print(es21(G))
