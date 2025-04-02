@@ -474,7 +474,6 @@ def es15(G):
     for i in range(len(visitati)):
         if visitati[i] == 2:
             X.append(i)
-    print(visitati)
     return X
 
 G = [
@@ -487,7 +486,7 @@ G = [
     [5,7],
     [0,3]
 ]
-#print(es15(G))
+print(es15(G))
 
 '''
 Si consideri un labirinto rappresentato da una matrice quadrata binaria M di 
@@ -632,7 +631,7 @@ def es17(G, C, a, b):
 
 G = [[1,2,3],[0,4,5,6],[0,6],[0,4],[1,3,5],[1,4,6],[1,2,5]]
 C = [0,0,1,1,1,2,0]
-#print(es17(G,C,6,1))
+print(es17(G,C,6,1))
 
 '''
 Devo eseguire n lavori, ognuno dei quali ha un tempo d’esecuzione specifico. Mi
@@ -781,4 +780,4 @@ def es21(G):
     return alb
 
 G = [[1,2],[0,2],[0,1],[4,6,10],[3],[],[3],[8],[7],[10],[3,9],[12,13],[11,14,15],[11,14],[12,13],[12]]
-print(es21(G))
+#print(es21(G))

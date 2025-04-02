@@ -335,16 +335,7 @@ P = [7,0,7,2,5,2,7,7]
 Dato un grafo G, restituire l'insieme X dei nodi che non formano cicli
 '''
 
-G = [
-    [1,6],
-    [],
-    [0],
-    [1],
-    [2],
-    [2],
-    [5,7],
-    [0,3]
-]
+G = [[1,6],[],[0],[1],[2],[2],[5,7],[0,3]]
 #print(es15(G))
 
 '''
@@ -359,6 +350,37 @@ ci si può spostare solo orizzontalmente e verticalmente.
 Progettare un algoritmo che, data la matrice M, in tempo O(n^2) determini il 
 numero totale di celle raggiungibili nel labirinto
 '''
+def DFSr_es16(x,G,vis):
+    vis[x] = 0
+    for y in G[x]:
+        if vis[y]==-1:
+            DFSr_es16(y,G,vis)
+
+def es16(G):
+    T = [[] for _ in range(len(G)*len(G))]
+    e = []
+    nodes = 0
+    for i in range(len(G)):
+        for j in range(len(G[0])):
+            nodes+=1
+            if G[i][j]==0:
+                if i!=len(G)-1 and G[i+1][j]==0:
+                    T[nodes].append(nodes+len(G))
+                    T[nodes+len(G)].append(nodes)
+
+                if j!=len(G)-1 and G[i][j+1]==0:
+                    T[nodes].append(nodes+1)
+                    T[nodes+1].append(nodes)
+
+                if i==0 or j==0 or i==len(G)-1 or j==len(G)-1:
+                    e.append(nodes)
+
+    print(e)
+    vis = [-1]*len(T)
+    for x in e:
+        if vis[x]==-1:
+            DFSr_es16(x, T, vis)
+    return vis.count(0)
 
 G = [
     [1,1,0,1,1,0,1],
@@ -388,6 +410,21 @@ che connette a e b, l’algoritmo deve restituire None.
 
 L’algoritmo deve avere una complessità O(m), dove m è il numero di archi nel grafo G.
 '''
+def es17(G,C,a,b):
+    D=[-1]*len(G)
+    D[a]=0
+    coda=[a]
+    i=0
+    while len(coda) > i:
+        u=coda[i]
+        i+=1
+        for y in G[u]:
+            if D[y]==-1 and C[y]!=C[u]:
+                D[y]=D[u]+1
+                coda.append(y)
+    if D[b]==-1:
+        return None
+    return D[b]
 
 G = [[1,2,3],[0,4,5,6],[0,6],[0,4],[1,3,5],[1,4,6],[1,2,5]]
 C = [0,0,1,1,1,2,0]
