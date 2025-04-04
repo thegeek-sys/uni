@@ -1,5 +1,23 @@
 from math import sqrt
 
+def sortTop1(G):
+    gradoEnt = [0]*len(G)
+    for i in range(len(G)):
+        for v in G[i]:
+            gradoEnt[v[0]]+=1
+    sorgenti = [ i for i in range(len(G)) if gradoEnt[i] == 0 ]
+    ST = []
+    while sorgenti:
+        u = sorgenti.pop()
+        ST.append(u)
+        for v in G[u]:
+            gradoEnt[v[0]]-=1
+            if gradoEnt[v[0]] == 0:
+                sorgenti.append(v[0])
+    if len(ST) == len(G):
+        return ST
+    return []
+
 def sortTop(G):
     gradoEnt = [0]*len(G)
     for i in range(len(G)):
@@ -436,15 +454,44 @@ Devo eseguire n lavori, ognuno dei quali ha un tempo d’esecuzione specifico. M
 per eseguire il lavoro i. Inoltre ho una lista di liste P di n componenti, dove
 P [i] contiene i lavori che devono essere completati prima che io possa iniziare il
 lavoro i.
-Procgettare un algoritmo che, dati T e P , in tempo O(n2), calcoli il tempo
+Progettare un algoritmo che, dati T e P , in tempo O(n^2), calcoli il tempo
 minimo necessario per completare tutti i lavori tenendo conto che `e possibile
-eseguire pi`u lavori in parallelo. L’algoritmo deve restituire +1 nel caso in
+eseguire pi`u lavori in parallelo. L’algoritmo deve restituire +infinito nel caso in
 cui non sia possibile comletare tutti i lavori (ad esempio a causa di cicli di
 dipendenza tra i lavori)
 '''
+def cicli_es18(x,P,vis):
+    vis[x]=1
+    for y in P[x]:
+        if vis[x]==1:
+            return True
+        if vis[x]==0:
+            if cicli_es18(y,P,vis):
+                return True
+    vis[x]=2
+    return False
+
+
+def es18(P,T):
+    vis = [0]*len(P)
+    for x in range(len(P)):
+        if vis[x] == -1:
+            if cicli_es18(x,P,vis):
+                return float('inf')
+
+    D = [0]*len(P)
+    ord = sortTop(P)
+    ord.reverse()
+    for i in ord:
+        for x in P[i]:
+            D[i]=max(D[i],T[x]+D[x])
+    return D[ord[-1]]+T[ord[-1]]
+
     
 T = [3,2,5,4,3,1]
 P = [[1,2],[3],[3],[4],[5],[]]
+#T=[4,3,5,2,1,6]
+#P = [[1,3],[3,2],[3],[],[0,5],[0,1,3]]
 #print(es18(P,T))
 
 '''
@@ -452,9 +499,18 @@ Progettare un algoritmo che, dato un DAG pesato G rappresentato mediante
 liste di adiacenza ed un suo vertice sorgente s, restituisca il vettore delle distanze
 dei nodi da s.
 '''
+def es19(G,x):
+    ord=sortTop1(G)
+    D=[float('inf')]*len(G)
+    D[x]=0
+    for i in ord:
+        for x in G[i]:
+            D[x[0]]=min(D[x[0]],x[1]+D[i])
+    return D
 
-G = [[(2,1),(3,2),(5,4)],[(0,5),(3,1)],[],[(2,-3),(5,6)],[(1,6),(2,-2)],[],[]]
-#print(es19(G,4))
+
+G = [[(2,1),(3,2),(5,4)],[(0,5),(3,1)],[],[(2,-3),(5,6)],[(1,6),(2,-2)],[], []]
+print(es19(G,2))
 
 
 '''
@@ -519,4 +575,33 @@ def es(s,t,A):
     return f
 
 A = ['dote','rata','cave','data','cate','rapa','cane','core','rate','cose']
-print(es('cane','data',A))
+#print(es('cane','data',A))
+def DFSr_top(u, G, visitati, lista):
+	visitati[u] = 1
+	for v in G[u]:
+		if visitati[v] == 0:
+			DFSr_top(v, G, visitati, lista)
+	lista.append(u)
+
+def sortTop2(G):
+	visitati = [0]*len(G)
+	lista = []
+	for u in range(len(G)):
+		if visitati[u] == 0:
+			DFSr_top(u, G, visitati, lista)
+	lista.reverse()
+	return lista
+
+G=[
+    [2,4,6],
+    [2,4],
+    [],
+    [2],
+    [],
+    [0,6],
+    [3],
+    [0,4],
+    [5,7]
+]
+print(sortTop(G))
+

@@ -781,3 +781,26 @@ def es21(G):
 
 G = [[1,2],[0,2],[0,1],[4,6,10],[3],[],[3],[8],[7],[10],[3,9],[12,13],[11,14,15],[11,14],[12,13],[12]]
 #print(es21(G))
+
+'''
+
+'''
+def es22(n):
+    G = [[] for _ in range(n+1)]
+    for i in range(2,n):
+        if i+1<=n:
+            G[i].append(i+1)
+        if i*2<=n:
+            G[i].append(i*2)
+        if i*3<=n:
+            G[i].append(i*3)
+
+    p = [0]*(n+1)
+    p[2]=1
+    for i in range(n+1):
+        for j in G[i]:
+            p[j]+=p[i]
+    return p[n]
+
+print(es22(10))
+
