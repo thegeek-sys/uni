@@ -8,6 +8,9 @@ Data la sequenza X = (x1, x2,...xn) a valori distinti si considerino i seguenti
 tre problemi:
 a. Trovare la sottosequenza crescente di X di lunghezza massima.
 '''
+from re import L
+
+
 def es1(X):
     T=[1]*len(X)
     for i in range(len(X)):
@@ -120,7 +123,7 @@ def es3_1(X,S):
 
 X="0111010101"
 A=["01", "10", "011", "101"]
-print(es3_1(X,A))
+#print(es3_1(X,A))
 
 '''
 kermit sta cercando di attraversare un fiume
@@ -272,7 +275,7 @@ def es6_1(X,s):
 
 X=[5,2,2,6,1,7,3,5,11,3,6]
 #print(es6(X,25))
-print(es6_1(X,25))
+#print(es6_1(X,25))
 
 '''
 Abbiamo una sequenza S = (s1, s2, . . . , sn) di interi positivi.
@@ -327,8 +330,8 @@ def es7_1(S):
     return(T[-1])
 
 S=(1,2,3,5,4,6,7)
-print(es7(S))
-print(es7_1(S))
+#print(es7(S))
+#print(es7_1(S))
 
 '''
 Dati in input i tre numeri
@@ -863,7 +866,7 @@ def es30(A,V):
 
 A=[[1,4],[1,4],[4,6],[6,8],[3,4],[0,1]]
 V=[10,7,6,5,4,3]
-print(es30(A,V))
+#print(es30(A,V))
 
 '''
 Lyon, principe dell’impero di Grado, ha catturato e imprigionato in una fortezza
@@ -875,16 +878,264 @@ direttamente a sud o ad est della precedente (dunque pu`o solo spostarsi dalla c
 (i, j) alla casella (i + 1, j) o (i, j + 1)).
 Ephraim possiede dei punti salute iniziali, rappresentati da un numero intero.
 Ogni stanza del dungeon, incluse quella iniziale e quella finale, pu`o contenere
-
-degli sgherri all’interno (la cui quantit`a `e rappresentata da un intero nega-
-tivo) o delle cure (la cui quantit`a `e rappresentata da un intero positivo).
-
-Per ogni sgherro affrontato in una stanza, Ephraim perder`a un punto salu-
-te, mentre ne guadagner`a uno per ogni cura consumata. Se in un qualsiasi
-
-momento la salute di Ephraim raggiunge un numero minore o uguale a 0,
-Ephraim morir`a immediatamente.
+degli sgherri all’interno (la cui quantit`a `e rappresentata da un intero
+negativo) o delle cure (la cui quantit`a `e rappresentata da un intero positivo).
+Per ogni sgherro affrontato in una stanza, Ephraim perder`a un punto 
+salute, mentre ne guadagner`a uno per ogni cura consumata. Se in un qualsiasi
+momento la salute di Ephraim raggiunge un numero minore o uguale a 0, Ephraim 
+morir`a immediatamente.
 Progettare un algoritmo che data in input la matrice M, i cui valori indicano
 gli interi rappresentanti gli elementi all’interno delle stanze del dungeon, trovi
 la minima quantit`a di salute che Ephraim deve avere per salvare sua sorella.
 '''
+def es31(M):
+    T=[[[0,0] for l in range(len(M[0]))]for _ in range(len(M))]
+    for i in range(len(T)):
+        for j in range(len(T[0])):
+            if i==j==0:
+                T[i][j][0]=M[i][j]
+                T[i][j][1]=M[i][j]
+            elif i==0 and M[i][j]<0:
+                T[i][j][0]=T[0][j-1][0]+M[i][j]
+                T[i][j][1]=T[0][j-1][1]+M[i][j]
+            elif i==0 and M[i][j]>0:
+                T[i][j][0]=T[0][j-1][0]+M[i][j]
+                T[i][j][1]=T[0][j-1][1]
+            elif j==0 and M[i][j]<0:
+                T[i][j][0]=T[i-1][0][0]+M[i][j]
+                T[i][j][1]=T[i-1][0][1]+M[i][j]
+            elif j==0 and M[i][j]>0:
+                T[i][j][0]=T[i-1][0][0]+M[i][j]
+                T[i][j][1]=T[i-1][0][1]
+            elif M[i][j]<0:
+                T[i][j][0]=max(T[i-1][j][0], T[i][j-1][0])+M[i][j]
+                k=max(T[i-1][j][0], T[i][j-1][0])+M[i][j]
+                if k<max(T[i-1][j][0], T[i][j-1][0]):
+                    T[i][j][1]=k
+                else:
+                    T[i][j][1]=max(T[i-1][j][0], T[i][j-1][0])
+            elif M[i][j]>0:
+                T[i][j][0]=max(T[i-1][j][0], T[i][j-1][0])+M[i][j]
+                T[i][j][1]=max(T[i-1][j][1], T[i][j-1][1])
+    for x in T:
+        print(x)
+    return 1 if T[-1][-1][1]>0 else abs(T[-1][-1][1])+1
+
+M = [
+    [ -1, -2, -3,  1],
+    [-1, -2,  4, -1],
+    [ 2, -3, -2, -2],
+    [ 3,  1, -5, 10]
+]
+#print(es31(M))
+
+'''
+Data una sequenza  crescente di  interi, vogliamo trovare la lunghezza massima per le  sottosequenze di  dove     ciascun elemento è divisore del successivo. 
+'''
+def es32(S):
+    T=[0]*len(S)
+    T[0]=1
+    for i in range(1,len(T)):
+        T[i]=1
+        for j in range(i-1,-1,-1):
+            if S[i]%S[j]==0:
+                T[i]=T[j]+1
+                break
+    print(T)
+    return max(T)
+
+S=[3,5,6,7,12,24]
+#print(es32(S))
+
+'''
+Data una sequenza  di  cifre decimali, vogliamo calcolare la lunghezza massima per  una sottosequenza non decrescente che contiene i tre simboli ,  e
+'''
+def es33(S):
+    T=[[0]*len(S) for _ in range(3)]
+    for i in range(len(T)):
+        for j in range(i,len(S)):
+            if i==0:
+                if S[j]==0:
+                    T[i][j]=T[i][max(0,j-1)]+1
+                else:
+                    T[i][j]=T[i][max(0,j-1)]
+            else:
+                if S[j]==i:
+                    T[i][j]=max(T[i][max(j-1,0)],T[i-1][j])+1
+                else:
+                    T[i][j]=T[i][j-1]
+    print(T)
+    return T[-1][-1]
+
+S=[0,1,2,5,6,1,4,1,2,2,2,1,5,2]
+#print(es33(S))
+
+'''
+Il display di un telefonino si presenta come di seguito indicato:123456789⇤0#Cerchiamo un particolare numero telefonico e sappiamo che:•il numero `e composto dancifre.•non contiene cifre uguali adiacenti•nel comporre il numero sul tastierino basta spostarsi solo tra tasti adiacentiin orizzontale o verticale
+'''
+def es34(n):
+    T=[[0]*10 for _ in range(n+1)]
+    T[1]=[1,1,1,1,1,1,1,1,1,1]
+    for i in range(2,n+1):
+        for j in range(10):
+            if j==0:
+                T[i][j]=T[i-1][8]
+            elif j==1:
+                T[i][j]=T[i-1][2]+T[i-1][4]
+            elif j==2:
+                T[i][j]=T[i-1][1]+T[i-1][3]+T[i-1][5]
+            elif j==3:
+                T[i][j]=T[i-1][2]+T[i-1][6]
+            elif j==4:
+                T[i][j]=T[i-1][1]+T[i-1][5]+T[i-1][7]
+            elif j==5:
+                T[i][j]=T[i-1][2]+T[i-1][4]+T[i-1][6]+T[i-1][8]
+            elif j==6:
+                T[i][j]=T[i-1][3]+T[i-1][5]+T[i-1][9]
+            elif j==7:
+                T[i][j]=T[i-1][4]+T[i-1][8]
+            elif j==8:
+                T[i][j]=T[i-1][5]+T[i-1][7]+T[i-1][9]+T[i-1][0]
+            elif j==9:
+                T[i][j]=T[i-1][6]+T[i-1][8]
+    return sum(T[-1])
+
+#print(es34(2))
+
+'''
+Abbiamo una matriceMdi interi di dimensionen⇥nconn>1. Unadiscesasu questa matrice `e una sequenza dincelle della matrice con i seguenti vincoli•le celle appartengono a righe diverse della matrice•la prima cella appartiene alla prima riga della matrice•ogni altra cella `e adiacente (in verticale o in diagonale) alla cella che laprecede.
+Progettare un algoritmo che, data la matriceM, trova il valore massimo tra ivalori delle possibili discese diM.
+'''
+def es35(M):
+    T=[[0]*len(M) for _ in range(len(M))]
+    for j in range(len(M)):
+        T[0][j]=M[0][j]
+    for i in range(1,len(M)):
+        for j in range(len(M)):
+            if j==0:
+                T[i][j]=max(T[i-1][j], T[i-1][j+1])+M[i][j]
+            elif j==len(M)-1:
+                T[i][j]=max(T[i-1][j]+M[i][j],T[i-1][j-1]+M[i][j],T[i][j-1])
+            else:
+                T[i][j]=max(T[i-1][j]+M[i][j],T[i-1][j-1]+M[i][j],T[i-1][j+1]+M[i][j],T[i][j-1])
+    for x in T:
+        print(x)
+    return T[-1][-1]
+
+M=[
+    [12,10,3,14,9],
+    [0,1,13,15,13],
+    [8,10,1,2,7],
+    [7,11,10,5,7],
+    [18,4,6,10,0]
+]
+#print(es35(M))
+
+'''
+Abbiamo  due  interi  ed   con .  Vogliamo  sapere  quanti  diversi  modi  ci  sono  di partizionare l'insieme dei primi  interi in  sottoinsiemi. 
+'''
+def es36(k,n):
+    T=[[0]*(k+1) for _ in range(n+1)]
+    for i in range(1,n+1):
+        for j in range(k+1):
+            if j==0 or j>i:
+                T[i][j]=0
+            elif j==1:
+                T[i][j]=1
+            else:
+                T[i][j]=j*T[i-1][j]+T[i-1][j-1]
+    for x in T:
+        print(x)
+    return T[-1][-1]
+
+#print(es36(2,3))
+
+'''
+Progettare un algoritmo che, data una sequenza decimaleSlungan, conta il numero di sottosequenze diSstrettamente crescenti. L’algoritmoproposto deve avere complessit`aO(n)
+'''
+def es37(S):
+    T=[[0]*10 for _ in range(len(S))]
+    T[0][S[0]]=1
+    for i in range(1,len(S)):
+        for j in range(10):
+            if j==S[i]:
+                s=0
+                for k in range(j+1):
+                    s+=T[i-1][k]
+                T[i][j]=s+1
+            else:
+                T[i][j]=T[i-1][j]
+    for x in T:
+        print(x)
+    return sum(T[-1])
+
+S=[3,2,4,5,4]
+#print(es37(S))
+
+'''
+Abbiamo diversi tipi di stringhe binarie lunghe al pi`u 2, conca-tenando stringhe si↵atte possiamo ottenere stringhe binarie di lunghezza arbi-traria.Progettare un algoritmo che prende in input l’insiemeIcoi tipi di stringhedisponibili ed una stringa binariaSlungane, in tempoO(n), conta i diversimodi con cui e’ possibile ottenereSconcatentando le stringhe dei tipi disponibili.
+'''
+def es38(S,I):
+    T=[0]*len(S)
+    if S[0] in I:
+        T[0]=1
+    if S[0:2] in I:
+        T[1]=T[0]+1
+    for i in range(2,len(S)):
+        if S[i-1:i+1] in I:
+            T[i]+=T[i-2]
+        if S[i] in I:
+            T[i]+=T[i-1]
+
+    print(T)
+    return T[-1]
+
+I=['0','01','10']
+S='001010'
+#print(es38(S,I))
+
+'''
+Data  una  stringa  binaria      vogliamo  contare  il  numero  di  diverse  coppie presenti nella sequenza.
+'''
+def es39(S):
+    T=[[0]*2 for _ in range(len(S))]
+    if S[0]=='0':
+        T[0][0]=1
+    for i in range(1,len(T)):
+        if S[i]=='0':
+            T[i][0]=T[i-1][0]+1
+            T[i][1]=T[i-1][1]
+        if S[i]=='1':
+            T[i][0]=T[i-1][0]
+            T[i][1]=T[i-1][0]+T[i-1][1]
+    return T[-1][-1]
+
+#print(es39('010010'))
+
+'''
+Una pedina  è posizionata sulla casella  in alto a sinistra di una scacchiera  e mediante  una  sequenza  di  mosse  tra  caselle  adiacenti  deve  raggiungere  la  casella   in  basso  a  destra.  Una  pedina  posizionata  sulla  casella  ha al più due  mosse  possibili:  spostarsi  verso  La  sequenza  di  caselle  toccate  dalla  pedina  nello spostarsi  da  a   determina  un  cammino.  Ogni  casella  della  della scacchiera è labellata con  o . Un cammino è definito lecito se non contiene caselle adiacenti con la stessa label.  Descrivere un algoritmo che data una matrice binaria  di dimensioni   calcola in tempo il numero di cammini leciti di.Progettare un algoritmo che risolve il problema in tempo   .Motivare BENE la correttezza e la complessità dell'algoritmo proposto.(0,0)n×n(n−1,n−1)(i,j)(0,0)(n−1,n−1)01Mn×nO(n2)M
+'''
+def es40(M):
+    T=[[0]*len(M) for _ in range(len(M))]
+    T[0][0]=1
+    for j in range(1,len(M)):
+        if M[0][j]!=M[0][j-1]:
+            T[0][j]=1
+    for i in range(1,len(M)):
+        for j in range(len(M)):
+            if j==0 and M[i][j]!=M[i-1][j]:
+                T[i][j]=T[i-1][j]
+            if j!=0 and M[i][j]!=M[i-1][j]:
+                T[i][j]+=T[i-1][j]
+            if j!=0 and M[i][j]!=M[i][j-1]:
+                T[i][j]+=T[i][j-1]
+    for x in T:
+        print(x)
+    return T[-1][-1]
+
+M=[
+    [1,0,1],
+    [0,1,0],
+    [0,1,1]
+]
+#print(es40(M))

@@ -358,7 +358,7 @@ def es15_1(n, sol, i, j):
         sol[i][j]=1
         es15_1(n, sol, i1, j1)
 
-es15(2)
+#es15(2)
 
 '''
 Dare lo pseudo-codice di un algoritmo che dato l’intero n, stampa
@@ -392,3 +392,370 @@ def es16_1(n, sol, i, j):
         es16_1(n, sol, i1, j1)
 
 #es16(3)
+
+'''
+Progettare un algoritmo che dato un intero positivo n in input stampi 
+tutte le stringhe contenenti n coppie di parentesi, ossia per ogni
+parentesi aperta deve esservene una chiusa. La complessit`a dell’algoritmo
+deve essere O(nS(n)), dove S(n) sono il numero
+di stringhe da stampare.
+'''
+def es17(n, sol=[], open=0, close=0):
+    if len(sol)==2*n:
+        print(''.join(sol))
+        return
+    if open<n:
+        sol.append('(')
+        es17(n, sol, open+1, close)
+        sol.pop()
+    if close<open:
+        sol.append(')')
+        es17(n, sol, open, close+1)
+        sol.pop()
+
+#es17(3)
+
+'''
+Dato un numero intero positivo n, definiamo come partizioni di tutte
+le sequenze di elementi inferiori o uguali ad n la cui somma `e
+esattamente n. In particolare, distinguiamo tra partizioni con ordine
+e senza ordine.
+'''
+def es18(n, sol=[], s=0):
+    if s==n:
+        print(sol)
+        return
+    for i in range(1,n+1):
+        if s+i<=n:
+            sol.append(i)
+            es18(n, sol, s+i)
+            sol.pop()
+#es18(4)
+
+'''
+progettare  un  algoritmo  che  data    una  stringa  lunga   sull’alfabeto   stampa tutte  le  stringhe  lunghe   sull’alfabeto   che  differiscono  da   in  ciascuna posizione e non hanno simboli adiacenti uguali. 
+'''
+def es19(X, sol=[]):
+    if len(X)==len(sol):
+        print(sol)
+        return
+    for i in range(0,3):
+        if str(i)!=X[len(sol)] and (len(sol)==0 or (len(sol)>0 and str(i)!=sol[-1])):
+            sol.append(str(i))
+            es19(X,sol)
+            sol.pop()
+
+#es19('2001')
+
+'''
+Progettare un algoritmo che, dato un intero    , stampa tutte le matrici binarie con  la proprietà che nella riga , ,  della matrice sono presenti esattamente  uni. L'algoritmo proposto deve avere complessità  dove  è il numero di matrici  da  stampare.
+'''
+def es20(n):
+    sol=[[0]*n for _ in range(n)]
+    es20_1(n,sol,0,0,0)
+
+def es20_1(n,sol,i,j,k):
+    if i==len(sol):
+        for x in sol:
+            print(x)
+        print()
+        return
+    if j==n-1:
+        j1=0
+        i1=i+1
+    else:
+        j1=j+1
+        i1=i
+    
+    if k<i:
+        sol[i][j]=1
+        if j1==0:
+            es20_1(n,sol,i1,j1,0)
+        else:
+            es20_1(n,sol,i1,j1,k+1)
+
+    if n-(j+1)>=i-k:
+        sol[i][j]=0
+        if j1==0:
+            es20_1(n,sol,i1,j1,0)
+        else:
+            es20_1(n,sol,i1,j1,k)
+#es20(3)
+
+'''
+bbiamo una matriceMdi interi di dimensionen⇥nconn>1. Unadiscesasu questa matrice `e una sequenza dincelle della matrice con i seguenti vincoli•le celle appartengono a righe diverse della matrice•la prima cella appartiene alla prima riga della matrice•ogni altra cella `e adiacente (in verticale o in diagonale) alla cella che laprecede.
+'''
+def es21(M,sol=[],i=0,j=0):
+    if len(sol)==len(M)-1:
+        sol.append(M[i][j])
+        print(sol)
+        return
+
+    sol.append(M[i][j])
+    if j>0:
+        es21(M,sol,i+1,j-1)
+        sol.pop()
+    es21(M,sol,i+1,j)
+    sol.pop()
+    if j+1<len(M):
+        es21(M,sol,i+1,j+1)
+        sol.pop()
+
+
+M=[
+    [1,2],
+    [3,4]
+]
+#es21(M)
+
+'''
+Cerchiamo un particolare numero telefonico e sappiamo che:•il numero `e composto dancifre.•non contiene cifre uguali adiacenti•nel comporre il numero sul tastierino basta spostarsi solo tra tasti adiacentiin orizzontale o verticale
+Progettare un algoritmo che, daton, enumera tutte le combinazioni possibiliper il numero telefonico da ricercare
+'''
+def es22(n):
+    next = {
+        0: [8],
+        1:[2,4],
+        2:[1,3,5],
+        3:[2,6],
+        4:[1,5,7],
+        5:[2,4,6,8],
+        6:[3,5,9],
+        7:[4,8],
+        8:[5,7,9,0],
+        9:[6,8]
+    }
+    for x in range(10):
+        es22_1(n, [x], next)
+
+
+def es22_1(n, sol, next):
+    if len(sol)==n:
+        print(sol)
+        return
+    
+    for i in next[sol[-1]]:
+        sol.append(i)
+        es22_1(n, sol, next)
+        sol.pop()
+
+#es22(2)
+        
+'''
+Progettare  un  algoritmo  che,  dato  un  intero ,  stampa  tutte  le  stringhe  binarie  di lunghezza     tali  che  il  numero  di  uni  presenti  nella  prima  metà  della  stringa  è  lo stesso del numero di uni presenti nella seconda metà.
+'''
+def es23(n, sol=[], first=0, sec=0):
+    if len(sol)==2*n:
+        print(sol)
+        return
+    if len(sol)<n:
+        sol.append(1)
+        es23(n, sol, first+1, sec)
+        sol.pop()
+        sol.append(0)
+        es23(n, sol, first, sec)
+        sol.pop()
+    else:
+        if sec<first:
+            sol.append(1)
+            es23(n, sol, first, sec+1)
+            sol.pop()
+        if sec==first or 2*n-len(sol)>first-sec:
+            sol.append(0)
+            es23(n, sol, first, sec)
+            sol.pop()
+
+#es23(2)
+
+'''
+Progettare  un  algoritmo  che,  data  una  sequenza  decimaleSlungan, stampa le sottosequenze diSstrettamente crescenti.L’algoritmo proposto deve avere complessit`aO(nD(n)) doveD(n)`eilnumerodi sequenze da stampare.
+'''
+def es24(S, i=0, sol=[]):
+    if i==len(S) and len(sol)>0:
+        print(sol)
+        return
+    if len(sol)==0 or S[i]>sol[-1]:
+        sol.append(S[i])
+        es24(S,i+1,sol)
+        sol.pop()
+    es24(S,i+1,sol)
+
+#es24([3,2,4,5,4])
+
+'''
+Progettare un algoritmo che,  dato l’interon,  stampa tutte lesequenze  lunghensull’alfabeto  ternario{a,b,c}dove  il  simboloa`e  sempreseguito da almeno due simbolib.L’algoritmo proposto deve avere complessit`aO(nS(n)) doveS(n)`eilnumerodi sequenze da stampare.
+'''
+def es25(n, sol=[], a=0):
+    if len(sol)==n:
+        print(''.join(sol))
+        return
+    if a>0:
+        sol.append('b')
+        es25(n,sol,a-1)
+        sol.pop()
+    else:
+        sol.append('b')
+        es25(n,sol,a)
+        sol.pop()
+        sol.append('c')
+        es25(n,sol,a)
+        sol.pop()
+    if n-len(sol)>2 and a==0:
+        sol.append('a')
+        es25(n,sol,2)
+        sol.pop()
+
+#es25(4)
+
+'''
+Progettare un algoritmo che, dati due  interi    e , stampa tutte le stringhe  binarie di lunghezza    in cui siano presenti almeno  zeri  consecutivi.
+'''
+def es26(n,k,sol=[],l=0):
+    if len(sol)==n:
+        print(sol)
+        return
+    sol.append(0)
+    es26(n,k,sol,l+1)
+    sol.pop()
+    if n-(len(sol)+1)>=k or l>=k:
+        sol.append(1)
+        if l>=k:
+            es26(n,k,sol,l)
+        else:
+            es26(n,k,sol,0)
+        sol.pop()
+
+#es26(4,2)
+
+'''
+Progettare  un  algoritmo  che  dati    tre  interi  positivi ,  e ,  con , stampa tutte le     stringhe ternarie lunghe  sull'alfabeto    dove il numero di occorrenze di  non  supera  ed il numero di occorrenze di  non supera L’algoritmo  proposto  deve  avere  complessità   dove  è il numero di stringhe da  stampare.
+'''
+def es27(n,m,k,sol=[],uno=0,due=0):
+    if len(sol)==n:
+        print(sol)
+        return
+    sol.append(0)
+    es27(n,m,k,sol,uno,due)
+    sol.pop()
+    if uno<m:
+        sol.append(1)
+        es27(n,m,k,sol,uno+1,due)
+        sol.pop()
+    if due<k:
+        sol.append(2)
+        es27(n,m,k,sol,uno,due+1)
+        sol.pop()
+
+#es27(3,1,2)
+
+'''
+Vogliamo trovare le sequenze di lunghezzansull’alfabeto{0,1,2}in cui non appaiono cifre pari adiacenti. Progettare un algoritmo che prendecome parametro l’interone stampa tutte le sequenze cui siamo interessati.
+'''
+def es28(n, sol=[]):
+    if len(sol)==n:
+        print(sol)
+        return
+    sol.append(1)
+    es28(n,sol)
+    sol.pop()
+    if len(sol)==0 or sol[-1]%2!=0:
+        sol.append(0)
+        es28(n,sol)
+        sol.pop()
+        sol.append(2)
+        es28(n,sol)
+        sol.pop()
+#es28(2)
+
+'''
+Progettare un algoritmo che, dato un interon, stampa tutte le stringhe binariedi lunghezza 2ntali che il numero di zeri presenti nella prima met`a della stringa`e inferiore o uguale al numero di uni presenti nella seconda met`a.L’algoritmo proposto deve avere complessit`aO(nS(n)) doveS(n)`eilnumerodi stringhe da stampare.
+'''
+def es29(n,sol=[],zero=0,uno=0):
+    if len(sol)==2*n:
+        print(sol)
+        return
+    if len(sol)<n:
+        sol.append(0)
+        es29(n,sol,zero+1,uno)
+        sol.pop()
+        sol.append(1)
+        es29(n,sol,zero,uno)
+        sol.pop()
+    else:
+        if 2*n-len(sol)>zero-uno:
+            sol.append(0)
+            es29(n,sol,zero,uno)
+            sol.pop()
+        sol.append(1)
+        es29(n,sol,zero,uno+1)
+        sol.pop()
+#es29(2)
+
+'''
+Progettare un algoritmo che, dato un interon, stampa tutte le stringhe binariedi lunghezza 2ntali che il numero di zeri presenti nella prima met`a della stringa`e inferiore o uguale al numero di uni presenti nella seconda met`a.L’algoritmo proposto deve avere complessit`aO(nS(n)) doveS(n)`eilnumerodi stringhe da stampare.
+'''
+def es30(n, sol=[], half1=0, half2=0):
+    if len(sol)==2*n:
+        print(sol)
+        return
+    if len(sol)<n:
+        sol.append(1)
+        es30(n,sol,half1+1,half2)
+        sol.pop()
+        sol.append(2)
+        es30(n,sol,half1,half2)
+        sol.pop()
+        sol.append(3)
+        es30(n,sol,half1+1,half2)
+        sol.pop()
+    else:
+        if 2*n-len(sol)>half1-half2:
+            sol.append(2)
+            es30(n,sol,half1,half2)
+            sol.pop()
+        if half2<half1:
+            sol.append(1)
+            es30(n,sol,half1,half2+1)
+            sol.pop()
+            sol.append(3)
+            es30(n,sol,half1,half2+1)
+            sol.pop()
+
+#es30(2)
+
+'''
+Progettare  un  algoritmo  che  data    una  stringa  lunga   sull’alfabeto   stampa tutte  le  stringhe  lunghe   sull’alfabeto   che  concordano  con  la  stringa  in esattamente una posizione.
+'''
+def es31(S, sol=[], u=False):
+    if len(sol)==len(S):
+        print(sol)
+        return
+
+    if not u and len(sol)==len(S)-1:
+            sol.append(int(S[-1]))
+            es31(S,sol,True)
+            sol.pop()
+    elif not u:
+        sol.append(0)
+        es31(S,sol,False if S[len(sol)-1]!='0' else True)
+        sol.pop()
+        sol.append(1)
+        es31(S,sol,False if S[len(sol)-1]!='1' else True)
+        sol.pop()
+        sol.append(2)
+        es31(S,sol,False if S[len(sol)-1]!='2' else True)
+        sol.pop()
+    else:
+        if S[len(sol)]!='0':
+            sol.append(0)
+            es31(S,sol,u)
+            sol.pop()
+        if S[len(sol)]!='1':
+            sol.append(1)
+            es31(S,sol,u)
+            sol.pop()
+        if S[len(sol)]!='2':
+            sol.append(2)
+            es31(S,sol,u)
+            sol.pop()
+#es31('200')
