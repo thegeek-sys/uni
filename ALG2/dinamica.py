@@ -1139,3 +1139,213 @@ M=[
     [0,1,1]
 ]
 #print(es40(M))
+
+'''
+Progettare un algoritmo che, dato n, in tempo O(n) calcoli il numero di modi che ci sono per risalire una scala con n pioli tenendo conto che per ciascuno step si puo' risalire di 1, 2 o 3 pioli. 
+'''
+def es41(n):
+    T=[0]*(n+1)
+    T[1]=1
+    T[2]=2
+    T[3]=4
+    for i in range(4, len(T)):
+        T[i]=T[i-1]+T[i-2]+T[i-3]
+    return T[-1]
+
+#print(es41(4))
+
+'''
+Progettare un algoritmo che, date due stringhe X e Y ciascuna di n caratteri, in tempo O(n^2), restituisca la lunghezza massima tra quelle delle sottosequenze comuni ad X e Y.
+'''
+def es42(X,Y):
+    T=[[0]*len(X) for _ in range(len(X))]
+    # T[i][j] = massima sottoseq comune tra la stringa X fino all'elemento i e la stringa Y fino all'elemento j
+    for j in range(len(T)):
+        if X[0]==Y[j]:
+            T[0][j]=1
+    for i in range(1,len(T)):
+        added=False
+        for j in range(len(T)):
+            if j==0:
+                T[i][j]=T[i-1][j]
+            else:
+                T[i][j]=max(T[i-1][j],T[i][j-1])
+
+            if X[i]==Y[j] and not added:
+                T[i][j]+=1
+                added=True
+    for x in T:
+        print(x)
+    return T[-1][-1]
+
+X='abzcdcd'
+Y='baccbdz'
+#print(es42(X,Y))
+
+'''
+Esercizio 17 pdf06
+'''
+def es43(x1,x2,x3,n):
+    T=[[0]*3 for _ in range(n+1)]
+    l=[x1,x2,x3]
+    for i in range(n+1):
+        for j in range(3):
+            if i<l[j]:
+                T[i][j]=0
+            elif i==l[j]:
+                T[i][j]=1
+            else:
+                T[i][j]=sum(T[i-l[j]])
+    return sum(T[-1])
+
+#print(es43(2,4,8,10))
+
+'''
+ Dare lo pseudo-codice di un algoritmo che data una sequenza di interi S trova una sottosequenza crescente di S di somma massima. Discutere la correttezza dell'algoritmo. L'algoritmo deve avere complessità O(n2).
+'''
+def es44(S):
+    T=[1]*len(S)
+    for i in range(1,len(T)):
+        k=1
+        for j in range(i-1,-1,-1):
+            if S[i]>S[j]:
+                k=max(T[j]+1,k)
+        T[i]=k
+    print(T)
+    return max(T)
+
+S=[50,4,100,2,48,3,34,30]
+#print(es44(S))
+
+'''
+Data una lista con una serie di tagli di monete ed
+un importo da raggiungere, trovare il numero minimo
+di monete necessarie per ottenere tale importo. Se non
+è possibile ottenere quell’importo restituire -1.
+'''
+def es45(S,r):
+    T=[[float('inf')]*len(S) for _ in range(r+1)]
+    for i in range(1,len(T)):
+        for j in range(len(T[0])):
+            if i==S[j]:
+                T[i][j]=1
+            elif j==0 and S[0]<i:
+                T[i][j]=T[i-S[0]][0]+1
+            elif S[j]<i:
+                T[i][j]=min(T[i-S[j]][j]+1,T[i][j-1])
+            elif j!=0:
+                T[i][j]=T[i][j-1]
+    for x in T:
+        print(x)
+    return T[-1][-1] if T[-1][-1]!=float('inf') else -1
+
+#print(es45([5,7,10,25],62))
+
+'''
+Dato un array di interi positivi ed un intero vogliamo
+contare le progressioni aritmetiche di ragione che
+compaiono come sottosequenze dell’array.
+'''
+def es46(S,c):
+    T=[1]*len(S)
+    for i in range(1,len(S)):
+        for j in range(i):
+            if abs(S[i]-S[j])==c:
+                T[i]+=T[j]
+    print(T)
+    return sum(T)
+
+#print(es46([1,3,5,4,6,7],2))
+
+'''
+Il valore di una sottosequenza è dato dalla somma dei suoi
+elementi. Data una sequenza di interi, vogliamo trovare il valore
+massimo tra quello delle sue sottosequenze crescenti.
+'''
+def es47(S):
+    T=[0]*len(S)
+    T[0]=S[0]
+    for i in range(1,len(S)):
+        T[i]=S[i]
+        s=0
+        for j in range(i):
+            if S[i]>S[j]:
+                s=max(T[j],s)
+        T[i]+=s
+    print(T)
+    return max(T)
+#print(es47([22,3,9,4,1,5,20,6,7,2]))
+
+'''
+Abbiamo un’asta lunga ed una lista ad componenti
+dove è il guadagno che si ottiene vendendo un’asta di
+lunghezza . Vogliamo sapere qual’è il guadagno massimo
+che è possibile ottenere vendendo l’asta di partenza dopo
+averla eventualmente partizionata.
+'''
+def es48(V,n):
+    T=[[0]*len(V) for _ in range(n+1)]
+    for i in range(1,len(T)):
+        for j in range(1,len(T[0])):
+            if j==1:
+                T[i][j]=T[i-1][1]+V[1]
+            elif j>i:
+                T[i][j]=0
+            elif i==j:
+                T[i][j]=V[j]
+            elif i>j:
+                T[i][j]=max(T[i-j][i-j],T[i-j][i-j-1])+V[j]
+    for x in T:
+        print(x)
+    return max(T[-1])
+
+V=[0,3,5,8,9,10,17,17,20]
+#print(es48(V,8))
+
+'''
+Progettare un algoritmo di tempo O(n) che
+dato un intero n, con n ≥ 2, vogliamo contare il numero di modi in cui `e
+
+possibile ottenere n partendo dal numero 2 ed applicando una serie di opera-
+zioni scelte tra: incrementare di 1 il valore precedente, raddoppiare il valore
+
+precedente, triplicare il valore precedente.
+'''
+def es49(n):
+    T=[0]*(n+1)
+    T[2]=1
+    for i in range(3,n+1):
+        T[i]+=T[i-1]
+        if i%2==0:
+            T[i]+=T[i//2]
+        if i%3==0:
+            T[i]+=T[i//3]
+    return T[-1]
+#print(es49(10))
+
+'''
+Date due stringhe X, Y rispettivamente lunghe
+n e m caratteri, definiamo l’edit distance tra X e Y come il minimo numero
+di operazioni necessarie per convertire una delle due nell’altra. In particolare,
+le operazioni ammesse sono: aggiunta di un carattere in un punto qualsiasi
+della stringa, eliminazione di un carattere qualsiasi della stringa o rimpiazzo
+di un carattere qualsiasi della stringa.
+'''
+def es50(X,Y):
+    if len(Y)>len(X):
+        X,Y=Y,X
+    T=[0]*len(X)
+    S=[0]*len(Y)
+    for i in range(len(T)):
+        ce=False
+        for j in range(len(Y)):
+            if X[i]==Y[j] and S[j]==0:
+                S[j]=1
+                ce=True
+        if ce:
+            T[i]=T[i-1]
+        else:
+            T[i]=T[i-1]+1
+    print(T)
+    return T[-1]
+es50('gym','pim')
